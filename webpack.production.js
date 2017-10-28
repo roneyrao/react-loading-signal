@@ -1,7 +1,7 @@
 //production specific configs;
 const path = require('path');
 const production = {
-	entry:'index.js',
+	entry:'./index.js',
 	context: path.resolve(__dirname, 'src'),
 	devtool: 'source-map',
 	output: {
