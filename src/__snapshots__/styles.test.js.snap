@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`json full matches 1`] = `
+Object {
+  "blobs": "FlexLoading__blobs",
+  "global": "FlexLoading__global FlexLoading__loading",
+  "globalMasked": "FlexLoading__globalMasked FlexLoading__global FlexLoading__loading FlexLoading__masked",
+  "loading": "FlexLoading__loading",
+  "local": "FlexLoading__local FlexLoading__loading",
+  "localMasked": "FlexLoading__localMasked FlexLoading__local FlexLoading__loading FlexLoading__masked",
+  "masked": "FlexLoading__masked",
+  "messageList": "FlexLoading__messageList",
+  "spinning": "FlexLoading__spinning",
+}
+`;

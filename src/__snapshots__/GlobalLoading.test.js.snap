@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GlobalLoading Component render properly with default props 1`] = `
+<div
+  className="FlexLoading__global FlexLoading__loading"
+  style={
+    Object {
+      "visibility": "hidden",
+    }
+  }
+>
+  <LoadingSpinning
+    message=""
+  />
+</div>
+`;
