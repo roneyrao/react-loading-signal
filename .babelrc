@@ -1,0 +1,37 @@
+{
+	"presets": [
+		["es2015",{
+			modules:false
+		}],
+		"stage-1",
+		"react"
+	],
+	env:{
+		es:{
+			plugins:[
+				['css-modules-transform', {
+					"generateScopedName": "[name]__[local]",
+					extractCss:'./styles/main.css',
+					prepend:['autoprefixer']
+				}]
+			]
+		},
+		cjs:{
+			plugins:[
+				['css-modules-transform', {
+					"generateScopedName": "[name]__[local]",
+				}],
+				"transform-es2015-modules-commonjs"
+			]
+		},
+		test:{
+			plugins:[
+				['css-modules-transform', {
+					"generateScopedName": "[name]__[local]",
+				}],
+				"transform-es2015-modules-commonjs"
+			]
+		}
+	}
+}
+
