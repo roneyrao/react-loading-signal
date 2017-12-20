@@ -1,5 +1,5 @@
 {
-  "name": "react-flexible-loading-indicator",
+  "name": "react-loading-signal",
   "version": "1.0.0",
   "description": "react loading indicator displayed globally or locally or both",
   "main": "cjs/index.js",
@@ -11,6 +11,7 @@
     "bundle": "cross-env NODE_ENV=production webpack",
     "test-dist": "jest --...",
     "modules": "BABEL_ENV=es babel ./src -d es && BABEL_ENV=cjs babel ./src -d cjs && cpx './src/styles/images/*' ./styles/images",
+    "x_prepublish": "npm run build",
     "build": "npm test && npm run bundle && npm run modules && npm run testDist"
   },
   "files": [
@@ -30,7 +31,7 @@
   ],
   "author": "Roney Rao",
   "license": "ISC",
-  "repository": "https://github.com/roneyrao/react-flexible-loading-indicator",
+  "repository": "https://github.com/roneyrao/react-loading-signal",
   "peerDependencies": {
     "react": "^16.0.0",
     "react-dom": "^16.0.0"

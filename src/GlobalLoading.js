@@ -12,12 +12,14 @@ import styles from './styles';
 //can theme be changed? can multiple themes coexist? no! global is singleton, one sign for many loadings.
 export class GlobalLoadingComp extends React.Component {
 	static propTypes={
+		theme:PropTypes.func,
 		masked: PropTypes.bool,
-		theme:PropTypes.func
+		closable: PropTypes.bool
 	}
 	static defaultProps={
+		theme:Spinning,
 		masked: false,
-		theme:Spinning
+		closable: false //if the masked overlay can be closed when click;
 	}
 	state = {
 		shown:false,
@@ -32,8 +34,11 @@ export class GlobalLoadingComp extends React.Component {
 	addLoading(msg=''){
 		this.loadingCount++;
 		const id=this.generateID();
-		//console.log('new loading', id, msg);
-		this.setState({shown:true, messages:{...this.state.messages, [id]:msg}});
+		const newState={shown:true};
+		if(msg){
+			newState.messages={...this.state.messages, [id]:msg};
+		}
+		this.setState(newState);
 		return id;
 	}
 	removeLoading(id){
@@ -44,7 +49,14 @@ export class GlobalLoadingComp extends React.Component {
 			this.loadingCount=0
 		}
 		delete this.state.messages[id];
+		//********************** ???????????????????? immutable??????????
 		this.setState({shown:!!this.loadingCount, messages:this.state.messages});
+	}
+	clickHandler=()=>{
+		if(this.props.masked && this.props.closable){
+			this.loadingCount=0
+			this.setState({shown:false, messages:{}});
+		}
 	}
 
 	render(){
@@ -63,6 +75,7 @@ export class GlobalLoadingComp extends React.Component {
 			<div 
 				className={this.props.masked?styles.globalMasked:styles.global} 
 				style={{visibility:this.state.shown?'visible':'hidden'}}
+				onClick={this.clickHandler}
 			>
 				<this.props.theme message={msgList} />
 			</div>
@@ -71,21 +84,30 @@ export class GlobalLoadingComp extends React.Component {
 }
 
 export default class GlobalLoading{
-	static singleComp=null;
-	localHandled=false;
-	constructor(theme, masked){
-		//mount global once for ever;
-		if(!this.constructor.singleComp){
-			const root = document.createElement('div');
-			root.style.position='relative';
-			this.constructor.singleComp=render(<GlobalLoadingComp {...{theme, masked}} />, root);
-			document.body.appendChild(root);
-			LoadingEvent.on(EVENT_LOCAL_HADNDLED, this.flagLocalHandled);
+	static singleInst=null;
 
+	Comp=null;
+	root=null;
+	localHandled=false;
+	constructor(theme, masked, closable){
+		if(this.constructor.singleInst){
+			//singleton: mount global once for ever; but still update its properties;
+			this.render(theme, masked, closable);
+			return this.constructor.singleInst;
+		}else{
+			this.constructor.singleInst=this;
 		}
+		this.root = document.createElement('div');
+		this.root.style.position='relative';
+		this.render(theme, masked, closable);
+		document.body.appendChild(this.root);
+		LoadingEvent.on(EVENT_LOCAL_HADNDLED, this.flagLocalHandled);
 	}
 	flagLocalHandled=()=>{
 		this.localHandled=true;
+	}
+	render(theme, masked, closable){
+		this.Comp=render(<GlobalLoadingComp {...{theme, masked, closable}} />, this.root);
 	}
 	open(msg){
 		//wait for local loading to handle;
@@ -96,7 +118,7 @@ export default class GlobalLoading{
 					this.localHandled=false;
 					reject();
 				}else{
-					resolve(this.constructor.singleComp.addLoading(msg));
+					resolve(this.Comp.addLoading(msg));
 				}
 			}, 10)
 		});
@@ -108,7 +130,7 @@ export default class GlobalLoading{
 	close(promise){
 		if(!promise)return;
 		promise.then((id)=>{
-			this.constructor.singleComp.removeLoading(id);
+			this.Comp.removeLoading(id);
 		},()=>{
 			//console.log('bypassed was not shown')
 		});

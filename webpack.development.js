@@ -15,7 +15,6 @@ let development = {
 		alias:{
 			FlexLoading:path.resolve(__dirname, 'src/'),
 		},
-		symlinks:false
 	},
 	plugins: [
 		new HtmlWebpackPlugin({

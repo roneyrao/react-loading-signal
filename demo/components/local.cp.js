@@ -3,13 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {LocalLoading} from 'FlexLoading';
  
-export default function Panel1(props){
+export default function Local(props){
 	return (
-		<div className='panel'>
-			<LocalLoading active={props.active} />
-		</div>
+		<LocalLoading active={props.active} message='Custom Message'/>
 	)
 }
-Panel1.propTypes={
+Local.propTypes={
 	active:PropTypes.bool,
 }

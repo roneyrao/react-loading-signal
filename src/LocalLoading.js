@@ -22,7 +22,7 @@ export default class LocalLoading extends React.Component {
 	static propTypes = {
 		active: PropTypes.bool.isRequired,
 		masked: PropTypes.bool,
-		message: PropTypes.string,
+		message: PropTypes.any,
 		button: PropTypes.instanceOf(Element), //if supplied, 'disabled' of property and class are set;
 		// where loading is placed;
 		container: PropTypes.oneOfType([PropTypes.instanceOf(Element), PropTypes.oneOf([false, undefined])]),
@@ -48,7 +48,7 @@ export default class LocalLoading extends React.Component {
 	}
 	renderLoading(Theme, message) {
 		//console.log('Theme', Theme);
-		render(<Theme message={message?<div className={styles.messageList}>{message}</div>:''} />, this.box);
+		render(<Theme message={message} />, this.box);
 	}
 	toggleDisplay(active, button) {
 		//when button changed, restore previous button state;

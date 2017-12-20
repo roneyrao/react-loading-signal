@@ -1,0 +1,15 @@
+*{
+	position:relative;
+}
+.container{
+	margin:2em;
+	display:flex;
+	flex-wrap:wrap;
+}
+.block{
+	flex:50%;
+	border:1em solid white;
+	box-sizing:border-box;
+	background:#eee;
+	padding:1em;
+}

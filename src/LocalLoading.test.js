@@ -3,7 +3,7 @@ import {mount} from 'enzyme';
 
 import LocalLoading from './LocalLoading';
 import styles from './styles';
-import * as Theme from './themes';
+import * as Themes from './themes';
 import {
 	LoadingEvent,
 	EVENT_LOCAL_HADNDLED
@@ -38,8 +38,8 @@ describe('initial props', function(){
 	})
 	test('supply message and theme', ()=>{//Blobs won't show message;
 		const msg='this is a message';
-		const wrapper=mount(<LocalLoading message={msg} theme={Theme.Spinning}/>);
-		expect(getBox(wrapper).querySelector('.'+styles.messageList).innerHTML).toBe(msg);
+		const wrapper=mount(<LocalLoading message={msg} theme={Themes.Spinning}/>);
+		expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe(msg);
 	})
 	test('specify button', ()=>{
 		const ctnr=document.createElement('div');
@@ -103,24 +103,24 @@ describe('change props', function(){
 	describe('message', function(){
 		test('undefined/empty -> new message', ()=>{
 			const msg='this is a message';
-			const wrapper=mount(<LocalLoading theme={Theme.Spinning}/>);
-			expect(getBox(wrapper).querySelector('.'+styles.messageList)).toBeNull();
+			const wrapper=mount(<LocalLoading theme={Themes.Spinning}/>);
+			expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe('');
 			wrapper.setProps({message:msg});
-			expect(getBox(wrapper).querySelector('.'+styles.messageList).innerHTML).toBe(msg);
+			expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe(msg);
 		})
 		test('with message -> empty', ()=>{
 			const msg='this is a message';
-			const wrapper=mount(<LocalLoading theme={Theme.Spinning} message={msg}/>);
-			expect(getBox(wrapper).querySelector('.'+styles.messageList).innerHTML).toBe(msg);
+			const wrapper=mount(<LocalLoading theme={Themes.Spinning} message={msg}/>);
+			expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe(msg);
 			wrapper.setProps({message:''});
-			expect(getBox(wrapper).querySelector('.'+styles.messageList)).toBeNull();
+			expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe('');
 		})
 		test('with message -> another message', ()=>{
 			const msg1='this is a message', msg2='this is another message';
-			const wrapper=mount(<LocalLoading theme={Theme.Spinning} message={msg1}/>);
-			expect(getBox(wrapper).querySelector('.'+styles.messageList).innerHTML).toBe(msg1);
+			const wrapper=mount(<LocalLoading theme={Themes.Spinning} message={msg1}/>);
+			expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe(msg1);
 			wrapper.setProps({message:msg2});
-			expect(getBox(wrapper).querySelector('.'+styles.messageList).innerHTML).toBe(msg2);
+			expect(getBox(wrapper).querySelector('.'+styles.spinning).innerHTML).toBe(msg2);
 		})
 	})
 	describe('button', function(){
@@ -209,9 +209,14 @@ describe('change props', function(){
 	})
 
 	describe('theme', function(){
-		test('undefined/no theme -> theme', ()=>{
+		test('undefined/default theme -> theme', ()=>{
+			const wrapper=mount(<LocalLoading />);
+			expect(getBox(wrapper).querySelector('.'+styles.blobs)).not.toBeNull();
+			wrapper.setProps({theme:Themes.Spinning});
+			expect(getBox(wrapper).querySelector('.'+styles.blobs)).toBeNull();
+			expect(getBox(wrapper).querySelector('.'+styles.spinning)).not.toBeNull();
 		})
-		test('theme -> no theme', ()=>{
+		test('theme -> undefined/default theme', ()=>{
 		})
 		test('theme -> another theme', ()=>{
 		})
