@@ -11,7 +11,7 @@
     "bundle": "cross-env NODE_ENV=production webpack",
     "test-dist": "jest --...",
     "modules": "BABEL_ENV=es babel ./src -d es && BABEL_ENV=cjs babel ./src -d cjs && cpx './src/styles/images/*' ./styles/images",
-    "x_prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "build": "npm test && npm run bundle && npm run modules && npm run testDist"
   },
   "files": [

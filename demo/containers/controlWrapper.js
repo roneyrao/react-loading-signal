@@ -50,7 +50,7 @@ function mapStateToProps(state, ownProps){
  
 function mapDispatchToProps(dispatch, ownProps){
 	return {
-		load:(timeout)=> dispatch(load(ownProps.ix, timeout)),
+		load:(timeout)=> dispatch(load(ownProps.ix, timeout, 'abc')),
 		stop:()=> dispatch(stop(ownProps.ix))
 	}
 }
