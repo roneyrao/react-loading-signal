@@ -13,11 +13,15 @@
 		}
 		,"sourceType":"module"
 	},
-	"plugins":[
-		"react",
-	],
 	"rules":{
 		"no-console":'off'
 	},
-	"extends":["eslint:recommended", "plugin:react/recommended"]
+  "settings": {
+    "eslint-plugin-disable": {
+      "paths": {
+        "jsx-a11y": ["**/*.js"]
+      }
+    }
+  },
+	"extends":["airbnb"]
 }

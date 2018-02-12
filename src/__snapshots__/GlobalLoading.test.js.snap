@@ -3,6 +3,7 @@
 exports[`GlobalLoading Component render properly with default props 1`] = `
 <div
   className="FlexLoading__global FlexLoading__loading"
+  onClick={[Function]}
   style={
     Object {
       "visibility": "hidden",

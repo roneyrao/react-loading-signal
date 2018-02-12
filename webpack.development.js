@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const outDir= path.resolve(__dirname, 'demo_build');
 let development = {
-	entry:['./index.js', 'core-js/fn/set', 'core-js/fn/map', 'raf/polyfill'], //polyfills for React16
+	entry: ['babel-polyfill', './index.js'],
 	context: path.resolve(__dirname, 'demo'),
 	devtool: 'cheap-module-source-map',
 	output: {
