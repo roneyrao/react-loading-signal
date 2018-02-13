@@ -9,8 +9,11 @@ import { Spinning } from './themes';
 import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
 import styles from './styles';
 
-// can theme be changed? can multiple themes coexist? no! global is singleton, one sign for many loadings.
 export class GlobalLoadingComp extends React.Component {
+  static generateID() {
+    return `loading${new Date().valueOf()}${Math.round(Math.random() * 10000)}`;
+  }
+
   static propTypes = {
     theme: PropTypes.func,
     masked: PropTypes.bool,
@@ -28,12 +31,9 @@ export class GlobalLoadingComp extends React.Component {
 
   loadingCount = 0; // multiple loadings may be pending meantime;
 
-  generateID() {
-    return `loading${new Date().valueOf()}${Math.round(Math.random() * 10000)}`;
-  }
   addLoading(msg = '') {
     this.loadingCount++;
-    const id = this.generateID();
+    const id = GlobalLoadingComp.generateID();
     const newState = { shown: true };
     if (msg) {
       newState.messages = { ...this.state.messages, [id]: msg };
@@ -62,6 +62,7 @@ export class GlobalLoadingComp extends React.Component {
 
   render() {
     // console.log('this.props.theme', this.props.theme);
+    const { theme } = this.props;
     const msgList = Object.keys(this.state.messages).length ? (
       <ul className={styles.messageList}>
         {Object.entries(this.state.messages).map(([k, v]) => <li key={k}>{v}</li>)}
@@ -76,7 +77,7 @@ export class GlobalLoadingComp extends React.Component {
         style={{ visibility: this.state.shown ? 'visible' : 'hidden' }}
         onClick={this.clickHandler}
       >
-        <this.props.theme message={msgList} />
+        <theme message={msgList} />
       </div>
     );
   }
@@ -107,7 +108,6 @@ export default class GlobalLoading {
     this.localHandled = true;
   };
   render(theme, masked, closable) {
-    aaaddafaaa;
     this.Comp = render(<GlobalLoadingComp {...{ theme, masked, closable }} />, this.root);
   }
   open(msg) {

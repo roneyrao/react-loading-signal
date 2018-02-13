@@ -1,9 +1,7 @@
 {
 	"env":{
 		"browser":true,
-		"node":true,
 		"es6":true,
-		"jest":true,
 	},
 	"parser": "babel-eslint",
 	"parserOptions":{
@@ -14,7 +12,12 @@
 		,"sourceType":"module"
 	},
 	"rules":{
-		"no-console":'off'
+		"no-console":'off',
+		"no-plusplus":'off',
+		"react/jsx-filename-extension":'off',
+		"react/sort-comp":'off',
+		"no-param-reassign":'off',
+		"global-require":'off'
 	},
   "settings": {
     "eslint-plugin-disable": {
@@ -23,5 +26,23 @@
       }
     }
   },
+  plugins:["eslint-plugin-disable"],
+  overrides: [
+  {
+    files: ["jest.setupFramework.js", "*.test.js"],
+    "env":{
+      "node":true,
+      "jest":true,
+    },
+    rules: {
+      "no-unused-expressions": "off",
+      "no-underscore-dangle":"off"
+    }
+  },{
+    files: "*.js",
+    rules: {
+      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+    }
+  }],
 	"extends":["airbnb"]
 }
