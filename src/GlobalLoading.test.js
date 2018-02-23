@@ -10,51 +10,80 @@ describe('GlobalLoading Component', () => {
   test('render properly with default props', () => {
     const wrapper = shallow(<GlobalLoadingComp />);
     expect(wrapper.prop('style').visibility).toBe('hidden');
+    expect(wrapper.childAt(0).equals(<Theme.Spinning message="" />)).toBe(true);
     expect(wrapper).toMatchSnapshot();
   });
   test('masked', () => {
     const wrapper = shallow(<GlobalLoadingComp masked />);
     expect(wrapper.hasClass(styles.globalMasked)).toBe(true);
   });
-  test('custom theme', () => {
-    const wrapper = shallow(<GlobalLoadingComp theme={Theme.Spinning} />);
-    expect(wrapper.childAt(0).equals(<Theme.Spinning message="" />)).toBe(true);
+  test('closable', () => {
+    const wrapper = shallow(<GlobalLoadingComp masked closable />);
+    const inst = wrapper.instance();
+
+    expect(wrapper.hasClass(styles.globalMasked)).toBe(true);
+    expect(wrapper.prop('style').visibility).toBe('hidden');
+
+    inst.addLoading('aaa');
+    wrapper.update();
+    expect(inst.loadingCount).toBe(1);
+    expect(wrapper.prop('style').visibility).toBe('visible');
+
+    wrapper.simulate('click');
+    expect(inst.loadingCount).toBe(0);
+    expect(wrapper.prop('style').visibility).toBe('hidden');
   });
-  test('handle message processing', () => {
+  test('custom theme', () => {
+    const wrapper = shallow(<GlobalLoadingComp theme={Theme.Blobs} />);
+    expect(wrapper.childAt(0).equals(<Theme.Blobs message="" />)).toBe(true);
+  });
+  describe('handle message processing', () => {
     const wrapper = mount(<GlobalLoadingComp />);
     const inst = wrapper.instance();
     const msg1 = 'this is a message';
     const msg2 = 'this is another message';
 
-    const id1 = inst.addLoading(msg1);
-    expect(inst.loadingCount).toBe(1);
-    expect(Object.keys(inst.state.messages).length).toBe(1);
-    expect(wrapper.getDOMNode().style.visibility).toBe('visible');
+    let id1;
+    let id2;
 
-    wrapper.update();
-    const ul = wrapper.find('ul');
-    expect(ul.exists()).toBe(true);
-    expect(ul.children().length).toBe(1);
-    expect(ul.childAt(0).text()).toBe(msg1);
+    test('addLoading', () => {
+      id1 = inst.addLoading(msg1);
+      wrapper.update();
 
-    const id2 = inst.addLoading(msg2);
-    wrapper.update();
-    expect(wrapper
-      .find('ul')
-      .childAt(1)
-      .text()).toBe(msg2);
+      expect(inst.loadingCount).toBe(1);
+      expect(inst.state.shown).toBe(true);
+      expect(Object.keys(inst.state.messages).length).toBe(1);
+      expect(wrapper.getDOMNode().style.visibility).toBe('visible');
+      const ul = wrapper.find('ul');
+      expect(ul.exists()).toBe(true);
+      expect(ul.children().length).toBe(1);
+      expect(ul.childAt(0).text()).toBe(msg1);
 
-    inst.removeLoading(id1);
-    wrapper.update();
-    expect(wrapper
-      .find('ul')
-      .childAt(0)
-      .text()).toBe(msg2);
+      id2 = inst.addLoading(msg2);
+      wrapper.update();
+      expect(wrapper
+        .find('ul')
+        .childAt(1)
+        .text()).toBe(msg2);
+    });
 
-    inst.removeLoading(id2);
-    wrapper.update();
-    expect(wrapper.find('ul').exists()).toBe(false);
-    expect(wrapper.getDOMNode().style.visibility).toBe('hidden');
+    test('removeLoading', () => {
+      inst.removeLoading(id1);
+      wrapper.update();
+      expect(wrapper
+        .find('ul')
+        .childAt(0)
+        .text()).toBe(msg2);
+
+      inst.removeLoading(id2);
+      wrapper.update();
+      expect(wrapper.find('ul').exists()).toBe(false);
+      expect(wrapper.getDOMNode().style.visibility).toBe('hidden');
+      expect(inst.loadingCount).toBe(0);
+
+      inst.removeLoading(id2);
+      expect(inst.loadingCount).toBe(0);
+    });
   });
 });
 
@@ -65,19 +94,19 @@ describe('GlobalLoading Class', () => {
   let removeLoading;
   beforeAll(() => {
     inst = new GlobalLoading(undefined, true);
-    inst.constructor.singleInst.addLoading = jest.fn(() => id);
-    ({ addLoading } = inst.constructor.singleInst);
-    inst.constructor.singleInst.removeLoading = jest.fn();
-    ({ removeLoading } = inst.constructor.singleInst);
+    inst.Comp.addLoading = jest.fn(() => id);
+    ({ addLoading } = inst.Comp);
+    inst.Comp.removeLoading = jest.fn();
+    ({ removeLoading } = inst.Comp);
   });
 
   test('component is rendered into body', () => {
     expect(document.body.querySelector(`.${styles.loading}`)).not.toBeNull();
   });
-  test.only('component is singleton', () => {
+  test('component is singleton', () => {
     const first = inst.constructor.singleInst;
     const inst2 = new GlobalLoading(null, true);
-    expect(first).toBe(inst2.constructor.singleInst);
+    expect(first).toBe(inst2);
   });
   test('add and remove message', (done) => {
     const msg = 'loading message';

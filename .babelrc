@@ -4,31 +4,43 @@
 			modules:false
 		}],
 		"stage-1",
+		"flow",
 		"react"
 	],
 	env:{
 		es:{
 			plugins:[
-				['css-modules-transform', {
-					"generateScopedName": "[name]__[local]",
-					extractCss:'./styles/main.css',
-					prepend:['autoprefixer']
-				}]
+				[
+          'css-modules-transform', 
+          {
+            "generateScopedName": "[name]__[local]",
+            extractCss:'./styles/main.css',
+            prepend:['autoprefixer']
+          }
+        ],
+        'react-flow-props-to-prop-types',
 			]
 		},
 		cjs:{
 			plugins:[
-				['css-modules-transform', {
-					"generateScopedName": "[name]__[local]",
-				}],
+				[
+          'css-modules-transform', 
+          {
+            "generateScopedName": "[name]__[local]",
+          }
+        ],
+        'react-flow-props-to-prop-types',
 				"transform-es2015-modules-commonjs"
 			]
 		},
 		test:{
 			plugins:[
-				['css-modules-transform', {
-					"generateScopedName": "[name]__[local]",
-				}],
+				[
+          'css-modules-transform', {
+            "generateScopedName": "[name]__[local]",
+          }
+        ],
+        'react-flow-props-to-prop-types',
 				"transform-es2015-modules-commonjs"
 			]
 		}

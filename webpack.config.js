@@ -18,4 +18,5 @@ if (process.env.NODE_ENV === 'production') {
   cfg = [cfg, merge.smart(cfgCmm, require('./webpack.production.min'))];
 }
 
+// console.log(cfg);
 module.exports = cfg;

@@ -1,21 +1,23 @@
-import {GlobalLoading, Themes} from 'FlexLoading';
+// @flow
+import { GlobalLoading } from '../../src';
 
-const gLoading=new GlobalLoading(Themes.Spinning, true, true);
-const calls={};
+const gLoading = new GlobalLoading();
+const calls = {};
 
-export function load(ix, timeout=Infinity, msg){
-	const key='load'+ix;
-	return function(dispatch){
-		dispatch({type:key, loading:true});
-		calls[ix]=gLoading.open(msg);
-		if(timeout!=Infinity){
-			window.setTimeout(function(){
-				dispatch({type:key, loading:false});
-			}, timeout*1000);
-		}
-	}
+export function stop(path: string) {
+  gLoading.close(calls[path]);
+  delete calls[path];
+  return { type: path, loading: false };
 }
-export function stop(ix){
-	gLoading.close(calls[ix]);
-	return {type:'load'+ix, loading:false};
+export function load(path: string, timeout: number = Infinity, msg: string) {
+  return function Load(dispatch: Function) {
+    if (calls[path]) return;
+    dispatch({ type: path, loading: true });
+    calls[path] = gLoading.open(msg);
+    if (timeout !== Infinity) {
+      window.setTimeout(() => {
+        dispatch(stop(path));
+      }, timeout * 1000);
+    }
+  };
 }

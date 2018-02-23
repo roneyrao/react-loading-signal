@@ -1,23 +1,33 @@
+// @flow
+import * as React from 'react';
+import { LocalLoading } from '../../src';
 
-import React, {Component as Comp} from 'react';
-import PropTypes from 'prop-types';
-import {LocalLoading} from 'FlexLoading';
- 
-export default class WithContainer extends Comp{
-	render(){
-		return (
-			<div>
-				<p>text text </p>
-				<p>text text </p>
-				<div ref={(div)=>{this.ctnr=div}}/>
-				<p>text text </p>
-				<p>text text </p>
-				<LocalLoading {...this.props} container={this.ctnr} />
-			</div>
-		)
-	}
+type Props = {
+  active: bool,
 }
-WithContainer.propTypes={
-	active:PropTypes.bool,
-	button:PropTypes.node
+type State = {
+  ctnr: ?HTMLElement,
+}
+export default class LocalWithContainer extends React.Component<Props, State> {
+  state = { ctnr: null };
+  ctnr: ?HTMLElement;
+  componentDidMount() {
+    if (!this.state.ctnr) {
+      this.setState({ ctnr: this.ctnr });
+    }
+  }
+  render() {
+    return (
+      <div>
+        <p>text text </p>
+        <p>text text </p>
+        <div
+          ref={(div: ?HTMLElement) => { this.ctnr = div; }}
+        />
+        <p>text text </p>
+        <p>text text </p>
+        <LocalLoading {...this.props} container={this.state.ctnr} />
+      </div>
+    );
+  }
 }

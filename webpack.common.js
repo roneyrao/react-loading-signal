@@ -1,7 +1,6 @@
 // basic configuration for all enviroments;
 const general = {
   bail: true, // exit when error;
-  entry: ['core-js/fn/array/entries', 'core-js/fn/promise', './index.js'],
   output: {
     filename: '[name].js',
   },

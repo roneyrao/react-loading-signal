@@ -2,7 +2,7 @@
 
 exports[`default message 1`] = `
 <div
-  className="FlexLoading__spinning"
+  className="LoadingSignal__spinning"
 >
   loading...
 </div>
@@ -10,7 +10,7 @@ exports[`default message 1`] = `
 
 exports[`supplied messages 1`] = `
 <div
-  className="FlexLoading__spinning"
+  className="LoadingSignal__spinning"
 >
   <ul>
     <li>

@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const outDir = path.resolve(__dirname, 'demo_built');
 let development = {
-  entry: ['babel-polyfill', './index.js'],
+  entry: ['raf/polyfill', 'babel-polyfill', './index.js'],
   context: path.resolve(__dirname, 'demo'),
   devtool: 'cheap-module-source-map',
   output: {
@@ -37,6 +37,7 @@ if (path.basename(require.main.filename) === 'webpack-dev-server.js') {
     devServer: {
       disableHostCheck: true,
       contentBase: path.resolve(__dirname, outDir),
+      open: true,
     },
   });
 }

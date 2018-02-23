@@ -1,24 +1,28 @@
-/**
- * Created by roney on 2017/9/20.
- */
-
-import React from 'react';
+// @flow
+import React, { Component } from 'react';
+import type { Node } from 'react';
 import { render } from 'react-dom';
-import PropTypes from 'prop-types';
 import { Spinning } from './themes';
 import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
 import styles from './styles';
 
-export class GlobalLoadingComp extends React.Component {
-  static generateID() {
+
+type Props = {
+  theme?: Function,
+  masked?: bool,
+  closable?: bool,
+};
+type State = {
+  shown: bool,
+  messages: {[string]: Node},
+};
+type Id = string;
+type IdPromise = Promise<Id>;
+
+export class GlobalLoadingComp extends Component<Props, State> {
+  static generateID(): Id {
     return `loading${new Date().valueOf()}${Math.round(Math.random() * 10000)}`;
   }
-
-  static propTypes = {
-    theme: PropTypes.func,
-    masked: PropTypes.bool,
-    closable: PropTypes.bool,
-  };
   static defaultProps = {
     theme: Spinning,
     masked: false,
@@ -31,17 +35,17 @@ export class GlobalLoadingComp extends React.Component {
 
   loadingCount = 0; // multiple loadings may be pending meantime;
 
-  addLoading(msg = '') {
+  addLoading(msg: Node) {
     this.loadingCount++;
     const id = GlobalLoadingComp.generateID();
-    const newState = { shown: true };
+    const newState: State = { shown: true, messages: {} };
     if (msg) {
       newState.messages = { ...this.state.messages, [id]: msg };
     }
     this.setState(newState);
     return id;
   }
-  removeLoading(id) {
+  removeLoading(id: Id) {
     // console.log('remove loading', id);
     this.loadingCount--;
     if (this.loadingCount < 0) {
@@ -61,11 +65,15 @@ export class GlobalLoadingComp extends React.Component {
   };
 
   render() {
-    // console.log('this.props.theme', this.props.theme);
-    const { theme } = this.props;
+    const Theme = this.props.theme || Spinning;
+    const msgs = this.state.messages;
     const msgList = Object.keys(this.state.messages).length ? (
       <ul className={styles.messageList}>
-        {Object.entries(this.state.messages).map(([k, v]) => <li key={k}>{v}</li>)}
+        {
+          // {Object.entries(this.state.messages).map(([k, v]) => <li key={k}>{v}</li>)}
+          Object.keys(msgs)
+          .map(k => <li key={k}>{msgs[k]}</li>)
+        }
       </ul>
     ) : (
       ''
@@ -77,42 +85,43 @@ export class GlobalLoadingComp extends React.Component {
         style={{ visibility: this.state.shown ? 'visible' : 'hidden' }}
         onClick={this.clickHandler}
       >
-        <theme message={msgList} />
+        <Theme message={msgList} />
       </div>
     );
   }
 }
 
 export default class GlobalLoading {
-  static singleInst = null;
+  static singleInst: GlobalLoading;
 
-  Comp = null;
-  root = null;
+  Comp: GlobalLoadingComp;
+  root: HTMLElement;
   localHandled = false;
-  constructor(theme, masked, closable) {
+
+  constructor(theme?:Function, masked?:bool, closable?:bool) {
     if (this.constructor.singleInst) {
       // singleton: mount global once for ever; but still update its properties;
-      this.render(theme, masked, closable);
+      this.constructor.singleInst.render(theme, masked, closable);
       return this.constructor.singleInst;
     }
     this.constructor.singleInst = this;
 
     this.root = document.createElement('div');
-    console.error('aaaaaaaaaaa', this.root);
     this.root.style.position = 'relative';
     this.render(theme, masked, closable);
+    if (!document.body) throw new Error('Please instantiate GlobalLoading after document.body is accessible');
     document.body.appendChild(this.root);
     LoadingEvent.on(EVENT_LOCAL_HADNDLED, this.flagLocalHandled);
   }
   flagLocalHandled = () => {
     this.localHandled = true;
   };
-  render(theme, masked, closable) {
+  render(theme?:Function, masked?:bool, closable?:bool) {
     this.Comp = render(<GlobalLoadingComp {...{ theme, masked, closable }} />, this.root);
   }
-  open(msg) {
+  open(msg:Node) {
     // wait for local loading to handle;
-    const promise = new Promise((resolve, reject) => {
+    const promise:IdPromise = new Promise((resolve, reject) => {
       window.setTimeout(() => {
         // console.log('this.localHandled', this.localHandled);
         if (this.localHandled) {
@@ -129,7 +138,7 @@ export default class GlobalLoading {
     }); // prevent error bubbling up;
     return promise;
   }
-  close(promise) {
+  close(promise:IdPromise) {
     if (!promise) return;
     promise.then(
       (id) => {

@@ -3,6 +3,9 @@
 		"browser":true,
 		"es6":true,
 	},
+  "globals":{
+    "SyntheticEvent":true
+  },
 	"parser": "babel-eslint",
 	"parserOptions":{
 		"ecmaFeatures":{
@@ -16,7 +19,9 @@
 		"no-plusplus":'off',
 		"react/jsx-filename-extension":'off',
 		"react/sort-comp":'off',
+    "jsx-quotes": [1, "prefer-single"],
 		"no-param-reassign":'off',
+		"no-underscore-dangle":'off',
 		"global-require":'off'
 	},
   "settings": {
