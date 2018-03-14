@@ -9,8 +9,9 @@
     "pretest": "flow",
     "build-e2e": "cd e2e && cross-env NODE_ENV=from_source webpack",
     "e2e": "npm run build-e2e && casperjs test e2e/casper.suites.js --dir=from_source",
-    "temp": "casperjs test e2e/test.js --dir=from_source",
-    "xtemp": "casperjs test --verbose --log-level=debug e2e/test.js --dir=from_source",
+    "updateSnapshot": "casperjs test e2e/casper.suites.js --dir=from_source --updateSnapshot",
+    "temp": "casperjs test e2e/test.js --dir=from_source ",
+    "xtemp": "casperjs test --verbose --log-level=debug e2e/test.js --dir=from_source --updateSnapshot",
     "unit": "jest",
     "test": "npm run unit && npm run e2e",
     "start": "cross-env NODE_ENV=development target=demo webpack-dev-server",
@@ -46,8 +47,8 @@
   "license": "MIT",
   "repository": "https://github.com/roneyrao/react-loading-signal",
   "peerDependencies": {
-    "react": "^15",
-    "react-dom": "^15"
+    "react": ">=15",
+    "react-dom": ">=15"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.5",
@@ -96,6 +97,7 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
+    "resemblejs": "^2.10.0",
     "rimraf": "^2.6.2",
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",

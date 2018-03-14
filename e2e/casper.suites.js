@@ -1,12 +1,38 @@
+require('babel-polyfill');
+
 const fs = require('fs');
+const resemble = require('resemblejs');
 
 const pfx = 'file:///' + fs.workingDirectory + '/e2e/index.html?dir=' + casper.cli.options.dir + '&entry=';
+const snapshotDir = 'snapshots/';
+
+casper.options.remoteScripts = ['../node_modules/babel-polyfill/dist/polyfill.js'];
 
 casper.options.onError = function(err) {
   casper.echo('environment error' + err);
 }
 
-casper.options.remoteScripts = ['../node_modules/babel-polyfill/dist/polyfill.js'];
+function testSnapshot(name, selector) {
+  const filePathNormal = snapshotDir + name + '.png';
+  if (casper.cli.options.updateSnapshot) {
+    casper[selector ? 'captureSelector' : 'capture'](filePathNormal, selector);
+    return Promise.resolve();
+  } else {
+    const filePathTemp = snapshotDir + 'temp_' + name + '.png';
+    casper[selector ? 'captureSelector' : 'capture'](filePathTemp, selector);
+    return new Promise(function (resolve, reject) {
+      resemble(filePathTemp).compareTo(filePathNormal).onComplete(function (data) {
+        fs.remove(filePathTemp, function (err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        });
+      });
+    });
+  }
+}
 
 casper.test.begin('global', function (test) {
   casper.start(pfx + 'global')
@@ -26,6 +52,16 @@ casper.test.begin('global', function (test) {
       test.assertVisible('.LoadingSignal__spinning');
       test.assertSelectorHasText('.LoadingSignal__messageList', 'file1');
 
+      var compared;
+      testSnapshot('global').then(function (data) {
+        test.assertEqual(data.misMatchPercentage, 100);
+        compared = true;
+      })
+      this.waitFor(function () {
+        return compared;
+      });
+    })
+    .then(function () {
       this.thenClick('#stop');
       return this.waitWhileSelector('.LoadingSignal__messageList');
     })

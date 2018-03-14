@@ -8,3 +8,4 @@
 /node_modules
 /coverage
 /flow-typed
+/e2e/from*
