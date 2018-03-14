@@ -9,7 +9,7 @@ casper.options.onError = function(err) {
   casper.echo('environment error' + err);
 }
 
-const snapshotDir = 'snapshots/';
+const snapshotDir = fs.workingDirectory + '/e2e/snapshots/';
 function testSnapshot(name, selector) {
   const filePathNormal = snapshotDir + name + '.png';
   if (casper.cli.options.updateSnapshot) {
@@ -21,20 +21,41 @@ function testSnapshot(name, selector) {
     casper[selector ? 'captureSelector' : 'capture'](filePathTemp, selector);
 
     return new Promise(function (resolve, reject) {
-      resemble.compare(filePathTemp, filePathNormal, null, function (err, data) {
-        if (err) {
-          reject(new Error('fail to compare snapshot'));
-        } else {
-          try {
-            fs.remove(filePathTemp);
+      resemble.compare(fs.read(filePathTemp), fs.read(filePathNormal), null, function (err, data) {
+        try {
+          // fs.remove(filePathTemp);
+          if (err) {
+            console.log(typeof err);
+            reject(new Error('fail to compare snapshot'));
+          } else {
             resolve(data);
-          } catch (err2) {
+          }
+        } catch (err2) {
+          console.log(err2);
+          if (err) {
+            reject(new Error('fail to compare snapshot' + err.message));
+          } else {
             reject(err2);
           }
         }
       });
     });
   }
+}
+
+function evaluateSnapshot(test, name, selector) {
+  var compared;
+  testSnapshot(name, selector).then(function (data) {
+    if (data) {
+      test.assertEqual(data.misMatchPercentage, 100);
+    }
+    compared = true;
+  }, function (err) {
+    test.fail(err);
+  })
+  return function () {
+    return compared;
+  };
 }
 
 casper.test.begin('global', function (test) {
@@ -55,19 +76,7 @@ casper.test.begin('global', function (test) {
       test.assertVisible('.LoadingSignal__spinning');
       test.assertSelectorHasText('.LoadingSignal__messageList', 'file1');
 
-      var compared;
-      testSnapshot('global').then(function (data) {
-        console.log('compared')
-        if ('misMatchPercentage' in data) {
-          test.assertEqual(data.misMatchPercentage, 100);
-        }
-        compared = true;
-      }, function (err) {
-        test.fail(err);
-      })
-      this.waitFor(function () {
-        return compared;
-      });
+      this.waitFor(evaluateSnapshot(test, 'global'));
     })
     .then(function () {
       this.thenClick('#stop');

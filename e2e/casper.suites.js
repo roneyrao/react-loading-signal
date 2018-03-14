@@ -4,7 +4,7 @@ const fs = require('fs');
 const resemble = require('resemblejs');
 
 const pfx = 'file:///' + fs.workingDirectory + '/e2e/index.html?dir=' + casper.cli.options.dir + '&entry=';
-const snapshotDir = 'snapshots/';
+const snapshotDir = fs.workingDirectory + '/e2e/snapshots/';
 
 casper.options.remoteScripts = ['../node_modules/babel-polyfill/dist/polyfill.js'];
 
@@ -19,16 +19,25 @@ function testSnapshot(name, selector) {
     return Promise.resolve();
   } else {
     const filePathTemp = snapshotDir + 'temp_' + name + '.png';
+
     casper[selector ? 'captureSelector' : 'capture'](filePathTemp, selector);
+
     return new Promise(function (resolve, reject) {
-      resemble(filePathTemp).compareTo(filePathNormal).onComplete(function (data) {
-        fs.remove(filePathTemp, function (err) {
+      resemble.compare(filePathTemp, filePathNormal, null, function (err, data) {
+        try {
+          fs.remove(filePathTemp);
           if (err) {
-            reject(err);
+            reject(new Error('fail to compare snapshot'));
           } else {
             resolve(data);
           }
-        });
+        } catch (err2) {
+          if (err) {
+            reject(new Error('fail to compare snapshot' + err.message));
+          } else {
+            reject(err2);
+          }
+        }
       });
     });
   }
@@ -54,8 +63,12 @@ casper.test.begin('global', function (test) {
 
       var compared;
       testSnapshot('global').then(function (data) {
-        test.assertEqual(data.misMatchPercentage, 100);
+        if (data) {
+          test.assertEqual(data.misMatchPercentage, 100);
+        }
         compared = true;
+      }, function (err) {
+        test.fail(err);
       })
       this.waitFor(function () {
         return compared;
@@ -88,6 +101,16 @@ casper.test.begin('local', function (test) {
       test.assertEqual(this.getElementAttribute('#load', 'class'), 'disabled');
       test.assertEqual(this.getElementAttribute('#load', 'disabled'), 'disabled');
 
+      var compared;
+      testSnapshot('local').then(function (data) {
+        test.assertEqual(data.misMatchPercentage, 100);
+        compared = true;
+      })
+      this.waitFor(function () {
+        return compared;
+      });
+    })
+    .then(function () {
       return this.thenClick('#stop');
     })
     .then(function () {
