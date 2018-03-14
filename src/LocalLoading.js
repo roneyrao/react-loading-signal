@@ -3,21 +3,21 @@ import * as React from 'react';
 import { render, findDOMNode, unmountComponentAtNode as unmount } from 'react-dom';
 import styles from './styles';
 import { Blobs } from './themes';
-import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
+// import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
+import type { Indicator } from './GlobalLoading';
 
 type Props = {
-  active: bool,
-  masked: bool,
+  active: ?Indicator,
+  masked: boolean,
   message: React.Node,
   button: HTMLElement, // if supplied, 'disabled' of property and class are set;
-  // where loading is placed;
-  container: HTMLElement | false | typeof undefined,
-  theme: Function,
+  container: HTMLElement | false, // where loading is placed;
+  theme: React.ComponentType<*>,
 };
 /*
  * Local loading state is managed by caller;
  */
-export default class LocalLoading extends React.Component<Props> {
+export default class LocalLoading extends React.PureComponent<Props> {
   static defaultProps = {
     masked: false,
     message: undefined,
@@ -37,7 +37,7 @@ export default class LocalLoading extends React.Component<Props> {
     }
     throw new Error('Local loading DOM is inaccessible');
   }
-  createLoadingBox(container: HTMLElement, masked: bool) {
+  createLoadingBox(container: HTMLElement, masked: boolean) {
     this.box = document.createElement('div');
     // console.error('masked', masked);
     this.box.setAttribute('class', masked ? styles.localMasked : styles.local);
@@ -51,21 +51,18 @@ export default class LocalLoading extends React.Component<Props> {
     }
     container.appendChild(this.box);
   }
-  renderLoading(Theme: React.ComponentType<{}>, message: React.Node) {
+  renderLoading(props) {
     // console.log('Theme', Theme);
-    Theme = Theme || Blobs;
-    render(<Theme message={message} />, this.box);
+    const Theme = props.theme || Blobs;
+    render(<Theme {...props} active={!!props.active} />, this.box);
   }
-  toggleDisplay(active: bool, button: HTMLElement) {
-    // when button changed, restore previous button state;
-    if (button !== this.props.button && this.props.button && this.props.active) {
-      this.props.button.classList.remove('disabled');
-      this.props.button.removeAttribute('disabled');
-    }
+  display(active: Props.active, button: HTMLElement) {
     if (active) {
       if (this.box) {
         this.box.style.visibility = 'visible';
-        LoadingEvent.emit(EVENT_LOCAL_HADNDLED); // notify global loading to bypass this one;
+        if (active !== true) {
+          active.canceled = true;
+        }
       }
       if (button) {
         button.classList.add('disabled');
@@ -81,10 +78,13 @@ export default class LocalLoading extends React.Component<Props> {
       }
     }
   }
-  componentWillReceiveProps({
-    active, button, container, message, masked, theme,
-  }: Props) {
+  componentWillReceiveProps(nextProps: Props) {
     // initial container
+    const {
+      active, button, message, masked, theme,
+    } = nextProps;
+    let { container } = nextProps;
+    let toRenderLoading;
     if (container !== this.props.container) {
       if (this.box) {
         this.destroy();
@@ -94,27 +94,39 @@ export default class LocalLoading extends React.Component<Props> {
       }
       if (container instanceof HTMLElement) {
         this.createLoadingBox(container, masked);
+        toRenderLoading = true;
       }
     } else if (this.box && masked !== this.props.masked) {
       this.box.setAttribute('class', masked ? styles.localMasked : styles.local);
     }
 
     // render box content
-    if (this.box && (message !== this.props.message || theme !== this.props.theme)) {
-      this.renderLoading(theme, message);
+    if (
+      toRenderLoading ||
+      (this.box &&
+        (active !== this.props.active ||
+          message !== this.props.message ||
+          theme !== this.props.theme))
+    ) {
+      this.renderLoading(nextProps);
+      if (active) {
+        this.display(active);
+      }
     }
 
     // show/hide box;
     if (active !== this.props.active || button !== this.props.button) {
-      this.toggleDisplay(active, button);
+      // when button changed, restore previous button state;
+      if (button !== this.props.button && this.props.button && this.props.active) {
+        this.props.button.classList.remove('disabled');
+        this.props.button.removeAttribute('disabled');
+      }
+      this.display(active, button);
     }
   }
   componentDidMount() {
-    const {
-      active, masked, button, message, theme,
-    } = this.props;
-    let container: HTMLElement | false | typeof undefined;
-    ({ container } = this.props);
+    const { active, masked, button }: Props = this.props;
+    let { container } = this.props;
     // console.log('didMount props', this.props);
     // initial container
     if (container === undefined) {
@@ -122,10 +134,10 @@ export default class LocalLoading extends React.Component<Props> {
     }
     if (container instanceof HTMLElement) {
       this.createLoadingBox(container, masked);
-      this.renderLoading(theme, message);
+      this.renderLoading(this.props);
     }
 
-    this.toggleDisplay(active, button);
+    this.display(active, button);
   }
   componentWillUnmount() {
     if (this.box) {
@@ -138,6 +150,7 @@ export default class LocalLoading extends React.Component<Props> {
     if (this.box.parentNode) {
       this.box.parentNode.removeChild(this.box);
     }
+    this.box = null;
   }
   // nothing to render; done manually into container;
   render() {

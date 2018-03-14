@@ -1,6 +1,6 @@
 import React from 'react';
-import { LocalLoading } from '../../src';
+import { LocalLoading, type Indicator } from '../../src';
 
-export default function Local(props) {
-  return <LocalLoading active={props.active} message="Custom Message" />;
+export default function Local(props: { active: Indicator }) {
+  return <LocalLoading active={props.active} />;
 }

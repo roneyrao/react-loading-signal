@@ -175,6 +175,7 @@ describe('change props', () => {
       wrapper.setProps({ container: ctnr });
       expect(getBox(wrapper)).toBeNull();
       expect(ctnr.querySelector(`.${styles.loading}`)).not.toBeNull();
+      expect(ctnr.querySelector(`.${styles.blobs}`)).not.toBeNull();
     });
     test('undefined/parentNode -> false/no container', () => {
       const wrapper = mount(<LocalLoading active={false} />);

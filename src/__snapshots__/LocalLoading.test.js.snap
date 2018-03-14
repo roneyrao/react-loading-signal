@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`initial props render properly with default props 1`] = `"<div style=\\"position: relative;\\"><i></i><div class=\\"FlexLoading__local FlexLoading__loading\\" style=\\"visibility: hidden;\\"><div class=\\"FlexLoading__blobs\\"></div></div></div>"`;
+exports[`initial props render properly with default props 1`] = `"<div style=\\"position: relative;\\"><i></i><div class=\\"LoadingSignal__local LoadingSignal__loading\\" style=\\"visibility: hidden;\\"><div class=\\"LoadingSignal__blobs\\"></div></div></div>"`;

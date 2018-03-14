@@ -1,13 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { LocalLoading } from '../../src';
+import { LocalLoading, type Indicator } from '../../src';
 
-export default function Local(props) {
-  return <LocalLoading {...props} container={false} />;
+export default function Local(props: { active: Indicator, button: HTMLElement }) {
+  return <LocalLoading active={props.active} button={props.button} container={false} />;
 }
-Local.propTypes = {
-  active: PropTypes.bool,
-};
-Local.defaultProps = {
-  active: false,
-};

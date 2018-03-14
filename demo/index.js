@@ -8,10 +8,12 @@ import css from './main.css';
 import reducer from './reducers';
 import {
   Global,
+  Local,
+  // Both,
   LocalWithContainer,
-  //   LocalCustomTheme,
-  //   LocalWithoutIndicator,
-  //   LocalProgress,
+  LocalWithoutIndicator,
+  LocalProgress,
+  // LocalCustomTheme,
 } from './containers';
 
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -20,7 +22,10 @@ render(
   <Provider store={store}>
     <div className={css.container}>
       <Global />
+      <Local />
       <LocalWithContainer />
+      <LocalWithoutIndicator />
+      <LocalProgress />
     </div>
   </Provider>,
   document.getElementById('root'),

@@ -4,7 +4,9 @@
 		"es6":true,
 	},
   "globals":{
-    "SyntheticEvent":true
+    "SyntheticEvent":true,
+    "casper":true,
+    "__utils__":true
   },
 	"parser": "babel-eslint",
 	"parserOptions":{
@@ -22,7 +24,9 @@
     "jsx-quotes": [1, "prefer-single"],
 		"no-param-reassign":'off',
 		"no-underscore-dangle":'off',
-		"global-require":'off'
+		"global-require":'off',
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": false}],
+    "flowtype/define-flow-type": 1
 	},
   "settings": {
     "eslint-plugin-disable": {
@@ -31,23 +35,19 @@
       }
     }
   },
-  plugins:["eslint-plugin-disable"],
-  overrides: [
-  {
-    files: ["jest.setupFramework.js", "*.test.js"],
+  plugins:["disable", "flowtype"],
+  overrides: [{
+    files: ["jest.setupFramework.js", "e2e/**/*.js", "demo/**/*.js", "src/*.test.js"],
     "env":{
       "node":true,
       "jest":true,
+      "phantomjs":true,
     },
     rules: {
+      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
       "no-unused-expressions": "off",
       "no-underscore-dangle":"off"
-    }
-  },{
-    files: "*.js",
-    rules: {
-      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
-    }
+    },
   }],
 	"extends":["airbnb"]
 }

@@ -2,7 +2,7 @@
 
 exports[`GlobalLoading Component render properly with default props 1`] = `
 <div
-  className="FlexLoading__global FlexLoading__loading"
+  className="LoadingSignal__global LoadingSignal__loading"
   onClick={[Function]}
   style={
     Object {

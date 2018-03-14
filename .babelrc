@@ -11,7 +11,7 @@
 		es:{
 			plugins:[
 				[
-          'css-modules-transform', 
+          'css-modules-transform',
           {
             "generateScopedName": "[name]__[local]",
             extractCss:'./styles/main.css',
@@ -24,7 +24,7 @@
 		cjs:{
 			plugins:[
 				[
-          'css-modules-transform', 
+          'css-modules-transform',
           {
             "generateScopedName": "[name]__[local]",
           }
@@ -40,7 +40,6 @@
             "generateScopedName": "[name]__[local]",
           }
         ],
-        'react-flow-props-to-prop-types',
 				"transform-es2015-modules-commonjs"
 			]
 		}

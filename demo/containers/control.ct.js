@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Control from '../components/control.cp';
-import { load, stop } from '../actions/general.act';
+import { load, stop } from '../actions';
 
 
 function mapStateToProps(state, ownProps) {
@@ -14,14 +14,22 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    load: timeout => dispatch(load(ownProps.path, timeout, ownProps.path)),
+    load: timeout => dispatch((ownProps.load || load)(ownProps.path, timeout, ownProps.path)),
     stop: () => dispatch(stop(ownProps.path)),
   };
 }
 
 const ControlCtnr = connect(mapStateToProps, mapDispatchToProps)(Control);
 
-let ix = 0;
-export default function ControlWrapper(props: {}) {
-  return <ControlCtnr path={`file_${++ix}`} {...props} />;
+export default class ControlWrapper extends React.PureComponent<{}> {
+  static ix = 0;
+
+  state = { path: '' };
+  componentWillMount() {
+    ++this.constructor.ix;
+    this.setState({ path: `file_${this.constructor.ix}` });
+  }
+  render() {
+    return <ControlCtnr path={this.state.path} {...this.props} />;
+  }
 }

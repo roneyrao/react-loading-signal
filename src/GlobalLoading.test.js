@@ -10,7 +10,7 @@ describe('GlobalLoading Component', () => {
   test('render properly with default props', () => {
     const wrapper = shallow(<GlobalLoadingComp />);
     expect(wrapper.prop('style').visibility).toBe('hidden');
-    expect(wrapper.childAt(0).equals(<Theme.Spinning message="" />)).toBe(true);
+    expect(wrapper.childAt(0).equals(<Theme.Spinning message='' />)).toBe(true);
     expect(wrapper).toMatchSnapshot();
   });
   test('masked', () => {
@@ -35,7 +35,7 @@ describe('GlobalLoading Component', () => {
   });
   test('custom theme', () => {
     const wrapper = shallow(<GlobalLoadingComp theme={Theme.Blobs} />);
-    expect(wrapper.childAt(0).equals(<Theme.Blobs message="" />)).toBe(true);
+    expect(wrapper.childAt(0).equals(<Theme.Blobs message='' />)).toBe(true);
   });
   describe('handle message processing', () => {
     const wrapper = mount(<GlobalLoadingComp />);

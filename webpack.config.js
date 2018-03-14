@@ -4,7 +4,7 @@ const merge = require('webpack-merge');
 const cfgCmm = require('./webpack.common.js');
 
 // eslint-disable-next-line import/no-dynamic-require
-const cfgEnv = require(`./webpack.${process.env.NODE_ENV}.js`);
+const cfgEnv = require(`./webpack.${process.env.target}.js`);
 let cfg = merge.smart(cfgCmm, cfgEnv);
 
 if (cfg.output.path === cfg.context) {
@@ -14,8 +14,8 @@ if (cfg.output.path === cfg.context) {
 if (!path.basename(require.main.filename) === 'webpack-dev-server.js') {
   require('rimraf').sync(cfg.output.path);
 }
-if (process.env.NODE_ENV === 'production') {
-  cfg = [cfg, merge.smart(cfgCmm, require('./webpack.production.min'))];
+if (process.env.target === 'library') {
+  cfg = [cfg, merge.smart(cfgCmm, require('./webpack.library.min'))];
 }
 
 // console.log(cfg);

@@ -1,14 +1,15 @@
 // @flow
 import * as React from 'react';
 import css from '../main.css';
+import { type Indicator } from '../../src';
 
 type Props = {
-  active: bool,
+  active: Indicator,
   path: string,
   load: (number) => {},
   stop: () => {},
-  setBtn: (btn: ?HTMLElement) => {},
-  setActive: (active: bool) => {},
+  setButton: (btn: ?HTMLElement) => {},
+  setActive: (active: Indicator) => {},
 }
 type State = { timeout: number, isInfinity: bool };
 
@@ -34,16 +35,18 @@ class Control extends React.Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    if (this.props.setButton) {
+      this.props.setButton(this.btn);
+    }
+  }
+
   render() {
     return (
       <div className={css.control}>
         <button
           onClick={this.load}
-          ref={(btn) => {
-            if (this.props.setBtn) {
-              this.props.setBtn(btn);
-            }
-          }}
+          ref={(btn) => { this.btn = btn; }}
         >
           Load {this.props.path}
         </button>

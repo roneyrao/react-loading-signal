@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1" />
+	<title>React-Loading-Signal test</title>
+</head>
+
+<body>
+	<div id='root'></div>
+  <script>
+  (function() {
+    function loadScript(path) {
+      var script = document.createElement('script');
+      script.src = path;
+      script.async = false;
+      document.body.appendChild(script);
+    }
+    var search = document.location.search;
+    var params = {};
+    if (search && search.length > 1) {
+      search = search.substr(1);
+      search = search.split('&');
+      for (var i=0, len = search.length; i<len; i++) {
+        var pair = search[i].split('=');
+        params[pair[0]] = pair[1];
+      }
+      if (!params.dir) {
+        return alert('no dir');
+      }
+      if (!params.entry) {
+        return alert('no entry');
+      }
+      loadScript(params.dir + '/common.js');
+      loadScript(params.dir + '/' + params.entry + '.js');
+    } else {
+      alert('no params')
+    }
+
+  })();
+  </script>
+</body>
+
+</html>

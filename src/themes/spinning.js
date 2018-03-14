@@ -1,13 +1,10 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from '../styles';
 
-export default function LoadingSpinning({ message }) {
+export default function LoadingSpinning({ message }: { message?: React.ChildrenArray<mixed> }) {
   return <div className={styles.spinning}>{message}</div>;
 }
-LoadingSpinning.propTypes = {
-  message: PropTypes.node,
-};
 LoadingSpinning.defaultProps = {
   message: 'loading...',
 };

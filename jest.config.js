@@ -3,7 +3,7 @@ module.exports = {
   verbose: true,
 
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.js', 'demo/**/*.js'],
+  collectCoverageFrom: ['src/**/*.js'],
   coverageThreshold: {
     global: {
       statements: 80,
@@ -13,7 +13,7 @@ module.exports = {
     },
   },
 
-  roots: ['<rootDir>/src', '<rootDir>/demo'],
+  roots: ['<rootDir>/src'],
   moduleFileExtensions: ['js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   setupTestFrameworkScriptFile: '<rootDir>/jest.setupFramework.js',

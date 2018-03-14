@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import { render } from 'react-dom';
 import { Spinning } from './themes';
-import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
+// import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
 import styles from './styles';
 
 
 type Props = {
-  theme?: Function,
+  theme?: React.ComponentType<*>,
   masked?: bool,
   closable?: bool,
 };
@@ -17,7 +17,8 @@ type State = {
   messages: {[string]: Node},
 };
 type Id = string;
-type IdPromise = Promise<Id>;
+type IdPromise = Promise<Id> | bool;
+export opaque type Indicator = IdPromise;
 
 export class GlobalLoadingComp extends Component<Props, State> {
   static generateID(): Id {
@@ -98,7 +99,7 @@ export default class GlobalLoading {
   root: HTMLElement;
   localHandled = false;
 
-  constructor(theme?:Function, masked?:bool, closable?:bool) {
+  constructor(theme?:Props.theme, masked?:Props.masked, closable?:Props.closable) {
     if (this.constructor.singleInst) {
       // singleton: mount global once for ever; but still update its properties;
       this.constructor.singleInst.render(theme, masked, closable);
@@ -111,42 +112,36 @@ export default class GlobalLoading {
     this.render(theme, masked, closable);
     if (!document.body) throw new Error('Please instantiate GlobalLoading after document.body is accessible');
     document.body.appendChild(this.root);
-    LoadingEvent.on(EVENT_LOCAL_HADNDLED, this.flagLocalHandled);
+    // LoadingEvent.on(EVENT_LOCAL_HADNDLED, this.flagLocalHandled);
   }
-  flagLocalHandled = () => {
-    this.localHandled = true;
-  };
-  render(theme?:Function, masked?:bool, closable?:bool) {
+  // flagLocalHandled = () => {
+  //   this.localHandled = true;
+  // };
+  render(theme?:Props.theme, masked?:Props.masked, closable?:Props.closable) {
     this.Comp = render(<GlobalLoadingComp {...{ theme, masked, closable }} />, this.root);
   }
   open(msg:Node) {
-    // wait for local loading to handle;
-    const promise:IdPromise = new Promise((resolve, reject) => {
+    // wait for local loading to handle,
+    // since `Sync` work is performed after `handleTopLevelImpl` in `batchedUpdates`;
+    const idProm:IdPromise = new Promise((resolve, reject) => {
       window.setTimeout(() => {
-        // console.log('this.localHandled', this.localHandled);
-        if (this.localHandled) {
+        if (idProm.canceled) {
           // bypass this loading, and reset flag;
-          this.localHandled = false;
           reject();
         } else {
           resolve(this.Comp.addLoading(msg));
         }
       }, 10);
     });
-    promise.catch(() => {
+    idProm.catch(() => {
       // console.log('global loading bypassed');
     }); // prevent error bubbling up;
-    return promise;
+    return idProm;
   }
-  close(promise:IdPromise) {
-    if (!promise) return;
-    promise.then(
-      (id) => {
-        this.Comp.removeLoading(id);
-      },
-      () => {
-        // console.log('bypassed was not shown')
-      },
-    );
+  close(idProm?: IdPromise) {
+    if (!idProm) return;
+    idProm.then((id: Id) => {
+      this.Comp.removeLoading(id);
+    }, () => {});
   }
 }

@@ -1,25 +1,35 @@
 import React, { Component as Comp } from 'react';
-import { LocalLoading } from '../../src';
 
-class TxtTheme extends Comp {
+export default class TxtTheme extends Comp {
   static Symbols = ['--', '\\', '|', '/'];
-  Symbols = this.constructor.Symbols;
-  symLen = this.Symbols.length;
+  symLen = this.constructor.Symbols.length;
   symIndex = 0;
   state = { symbol: '' };
-  componentDidMount() {
+  clearTimer() {
+    if (this.timer) {
+      window.clearInterval(this.timer);
+    }
+    this.timer = null;
+  }
+  startSpinning() {
     this.timer = window.setInterval(() => {
-      this.symIndex = (this.symIndex + 1) % this.symIndex;
-      this.setState({ symbol: this.Symbols[this.symIndex] });
-    }, 500);
+      this.symIndex = (this.symIndex + 1) % this.symLen;
+      this.setState({ symbol: this.constructor.Symbols[this.symIndex] });
+    }, 200);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.active !== this.props.active) {
+      if (nextProps.active === true) {
+        this.startSpinning();
+      } else {
+        this.clearTimer();
+      }
+    }
   }
   componentWillUnmount() {
-    window.clearInterval(this.timer);
+    this.clearTimer();
   }
   render() {
-    return <div>{`${this.state.symbol} Loading`}</div>;
+    return <div>Loading <span style={{ display: 'inline-block', width: '2em' }}>{this.state.symbol}</span></div>;
   }
-}
-export default function CustomTheme(props) {
-  return <LocalLoading {...props} theme={TxtTheme} />;
 }
