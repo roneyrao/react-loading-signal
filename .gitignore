@@ -9,3 +9,4 @@
 /coverage
 /flow-typed
 /e2e/from*
+/e2e/snapshots/temp_*

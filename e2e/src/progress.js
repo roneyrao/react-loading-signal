@@ -27,13 +27,14 @@ export default class Local extends React.Component<{}, { active: boolean, progre
   render() {
     return (
       <div>
-        <div id='box' />
         <button id='load' onClick={() => store.dispatch(loadProgress(path))} />
-        <LocalLoading
-          {...this.state}
-          theme={Themes.Progress}
-          message={{ progress: this.state.progress }}
-        />
+        <div id='box'>
+          <LocalLoading
+            {...this.state}
+            theme={Themes.Progress}
+            message={{ progress: this.state.progress }}
+          />
+        </div>
       </div>
     );
   }
