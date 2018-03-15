@@ -1,7 +1,7 @@
 // @flow
-import { GlobalLoading, type Indicator } from '../src';
+import { GlobalLoading, Themes, type Indicator } from '../src';
 
-const gLoading = new GlobalLoading();
+let gLoading;
 const calls: { [string]: Indicator } = {};
 
 export function stop(path: string) {
@@ -38,7 +38,7 @@ export function loadProgress(path: string) {
       progress = 1;
     }
     _dispatch({ type: path, loading: calls[path], progress });
-    if (progress === 1) {
+    if (!calls[path] || progress === 1) {
       _dispatch(stop(path));
     } else {
       setTimeout(run, 500);
@@ -55,3 +55,15 @@ export function loadProgress(path: string) {
     start(dispatch);
   };
 }
+
+const creators = [() => new GlobalLoading(), () => new GlobalLoading(Themes.Circling, true, true)];
+let ix = 0;
+
+function changeGlobalTheme() {
+  gLoading = creators[ix]();
+  ix ^= 1; // eslint-disable-line no-bitwise
+}
+
+export { changeGlobalTheme };
+
+changeGlobalTheme();

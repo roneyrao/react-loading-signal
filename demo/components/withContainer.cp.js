@@ -14,18 +14,13 @@ export default class LocalWithContainer extends React.Component<Props, State> {
   state = { ctnr: null };
   ctnr: ?HTMLElement;
   componentWillReceiveProps(newProps: Props) {
-    if (newProps.active !== this.props.active && this.props.setActive) {
+    if (newProps.active !== this.props.active && newProps.active) {
       this.setState({ ctnr: this.ctnr });
     }
-  }
-  componentDidMount() {
-    // eslint-disable-next-line react/no-did-mount-set-state
   }
   render() {
     return (
       <div>
-        <p>text text </p>
-        <p>text text </p>
         <p>text text </p>
         <p>text text </p>
         <div

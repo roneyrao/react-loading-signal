@@ -14,17 +14,17 @@ function testSnapshot(name, selector) {
     casper[selector ? 'captureSelector' : 'capture'](filePathTemp, selector);
 
     return new Promise(function (resolve, reject) {
-      resemble.compare(filePathTemp, filePathNormal, function (err, data) {
+      resemble.compare('file:///' + filePathTemp, 'file:///' + filePathNormal, function (err, data) {
         try {
           // fs.remove(filePathTemp);
           if (err) {
-            reject(new Error('fail to compare snapshot'));
+            reject(new Error('Fail to compare snapshot'));
           } else {
             resolve(data);
           }
         } catch (err2) {
           if (err) {
-            reject(new Error('fail to compare snapshot' + err.message));
+            reject(new Error('Fail to compare snapshot' + err.message));
           } else {
             reject(err2);
           }
@@ -42,10 +42,11 @@ module.exports = function matchSnapshots(name, selector) {
 
   testSnapshot(name, selector).then(function (data) {
     if (data) {
-      console.log('mismatch percentage: ', data.rawMisMatchPercentage, ' less than 3');
+      console.log('Mismatch percentage: ', data.rawMisMatchPercentage, ' less than 3');
       result.match = data.rawMisMatchPercentage < 3; // tolerant of spinning
     }
   }, function (err) {
+    console.log('Compare error occured');
     result.error = err;
   });
 

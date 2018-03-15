@@ -3,7 +3,6 @@ import React from 'react';
 import { LocalLoading, type Indicator } from '../../src';
 import ControlCtnr from './control.ct';
 import Block from '../components/block.cp';
-import CustomTheme from '../components/customTheme.cp';
 
 type State = { active: Indicator, button: HTMLElement };
 
@@ -18,10 +17,11 @@ export default class LocalCtnr extends React.PureComponent<{}, State> {
   render() {
     return (
       <Block
-        title='Local with customized theme'
+        title='Both global and local'
+        desc='When local loading does not intercept, global one is shown also'
       >
-        <LocalLoading {...this.state} theme={CustomTheme} />
-        <ControlCtnr setActive={this.setActive} setButton={this.setButton} />
+        <LocalLoading {...this.state} />
+        <ControlCtnr setActive={this.setActive} setButton={this.setButton} alwaysGlobal />
       </Block>
     );
   }

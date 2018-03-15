@@ -60,8 +60,7 @@ export class GlobalLoadingComp extends Component<Props, State> {
   }
   clickHandler = () => {
     if (this.props.masked && this.props.closable) {
-      this.loadingCount = 0;
-      this.setState({ shown: false, messages: {} });
+      this.setState({ shown: false });
     }
   };
 

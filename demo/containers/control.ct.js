@@ -14,7 +14,12 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    load: timeout => dispatch((ownProps.load || load)(ownProps.path, timeout, ownProps.path)),
+    load: timeout => dispatch((ownProps.load || load)(
+      ownProps.path,
+      timeout,
+      ownProps.path,
+      ownProps.alwaysGlobal,
+    )),
     stop: () => dispatch(stop(ownProps.path)),
   };
 }

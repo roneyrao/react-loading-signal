@@ -10,7 +10,11 @@ type Status = { loading: Indicator, progress: Number };
 type State = { active: Indicator, message: { progress: Number }};
 export default class LocalProgress extends React.PureComponent<{}, State> {
   setStatus = (status: Status) => {
-    this.setState({ active: status.active, message: { progress: status.progress } });
+    if (status) {
+      this.setState({ active: status.loading, message: { progress: status.progress } });
+    } else {
+      this.setState({ active: false, progress: 0 });
+    }
   }
   state = {};
   render() {

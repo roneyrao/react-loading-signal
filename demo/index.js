@@ -9,11 +9,11 @@ import reducer from './reducers';
 import {
   Global,
   Local,
-  // Both,
+  Both,
   LocalWithContainer,
   LocalWithoutIndicator,
   LocalProgress,
-  // LocalCustomTheme,
+  LocalCustomTheme,
 } from './containers';
 
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -21,11 +21,14 @@ const store = createStore(reducer, applyMiddleware(thunk));
 render(
   <Provider store={store}>
     <div className={css.container}>
+      <h3>You can click any button in any order within this page.</h3>
       <Global />
       <Local />
+      <Both />
       <LocalWithContainer />
       <LocalWithoutIndicator />
       <LocalProgress />
+      <LocalCustomTheme />
     </div>
   </Provider>,
   document.getElementById('root'),

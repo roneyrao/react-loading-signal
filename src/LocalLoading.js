@@ -11,7 +11,7 @@ type Props = {
   masked: boolean,
   message: React.Node,
   button: HTMLElement, // if supplied, 'disabled' of property and class are set;
-  container: HTMLElement | false, // where loading is placed;
+  container: ?HTMLElement | false, // where loading is placed;
   theme: React.ComponentType<*>,
 };
 /*
@@ -89,7 +89,7 @@ export default class LocalLoading extends React.PureComponent<Props> {
       if (this.box) {
         this.destroy();
       }
-      if (container === undefined) {
+      if (container == undefined) { // eslint-disable-line eqeqeq
         container = this.getContainer();
       }
       if (container instanceof HTMLElement) {
@@ -129,7 +129,7 @@ export default class LocalLoading extends React.PureComponent<Props> {
     let { container } = this.props;
     // console.log('didMount props', this.props);
     // initial container
-    if (container === undefined) {
+    if (container == undefined) { // eslint-disable-line eqeqeq
       container = this.getContainer();
     }
     if (container instanceof HTMLElement) {

@@ -12,7 +12,7 @@ type Props = {
 
 
 function caption(progress) {
-  return `current progress: ${(progress * 100).toPrecision(4)}%`;
+  return `progress: ${(progress * 100).toPrecision(4)}%`;
 }
 
 export default function LoadingProgress({ message }: Props) {

@@ -17,8 +17,8 @@ export default class LocalWithoutIndicator extends React.PureComponent<{}, State
   render() {
     return (
       <Block
-        title='Local in specified container'
-        desc='Loading indicator is placed in the specified container instead of parentNode by default'
+        title='Local without indicator'
+        desc='Loading indicator is hidden, showing global one; it still works to disable button'
       >
         <WithoutIndicator {...this.state} />
         <ControlCtnr setActive={this.setActive} setButton={this.setButton} />
