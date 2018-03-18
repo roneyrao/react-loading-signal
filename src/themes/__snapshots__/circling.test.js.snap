@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default message 1`] = `
+<div
+  className="LoadingSignal__circling"
+>
+  loading...
+</div>
+`;
+
+exports[`supplied messages 1`] = `
+<div
+  className="LoadingSignal__circling"
+>
+  <ul>
+    <li>
+      msg1
+    </li>
+    <li>
+      msg2
+    </li>
+  </ul>
+</div>
+`;

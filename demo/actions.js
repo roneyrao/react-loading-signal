@@ -1,16 +1,17 @@
 // @flow
-import { GlobalLoading, Themes, type Indicator } from '../src';
+import { GlobalLoading, Themes, type Indicator, type Active } from '../src';
 
 let gLoading;
 const calls: { [string]: Indicator } = {};
 
+export type Action = { type: string, loading: Active };
+export type Dispatch = Action => void;
+
 export function stop(path: string) {
   gLoading.close(calls[path]);
   delete calls[path];
-  return { type: path, loading: null };
+  return { type: path, loading: false };
 }
-type Action = { type: string, loading: Indicator };
-type Dispatch = Action => any;
 
 export function load(
   path: string,
@@ -20,7 +21,7 @@ export function load(
 ) {
   return function Load(dispatch: Dispatch) {
     if (calls[path]) return;
-    calls[path] = gLoading.open(msg || path);
+    calls[path] = gLoading.open(msg || `loading ${path} ...`);
     dispatch({ type: path, loading: alwaysGlobal || calls[path] });
     if (timeout !== Infinity) {
       window.setTimeout(() => {
@@ -31,7 +32,7 @@ export function load(
 }
 export function loadProgress(path: string) {
   let progress;
-  let _dispatch;
+  let _dispatch: Dispatch;
   function run() {
     progress += Math.random() * 0.2;
     if (progress > 1) {
@@ -49,7 +50,7 @@ export function loadProgress(path: string) {
     progress = 0;
     run();
   }
-  return function Load(dispatch) {
+  return function Load(dispatch: Dispatch) {
     if (calls[path]) return;
     calls[path] = gLoading.open();
     start(dispatch);

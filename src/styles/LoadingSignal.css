@@ -6,17 +6,6 @@
   text-align:center;
   transform: translate(-50%, -50%);
 }
-.masked {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: none;
-}
 .masked:before {
   content: '';
   top: 0;
@@ -35,16 +24,32 @@
   composes: loading;
   position: absolute;
 }
-.localMasked {
-  composes: local masked;
-}
 
 .global {
   composes: loading;
   position: fixed;
+  min-width: 3em;
+  max-width: 50%;
+}
+
+.masked {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: none;
+  min-width: auto;
+  max-width: none;
 }
 .globalMasked {
   composes: global masked;
+}
+.localMasked {
+  composes: local masked;
 }
 
 .messageList {
@@ -65,20 +70,15 @@
 }
 /*theme 'spinning'*/
 .spinning {
-  min-width: 3em;
-  max-width: 50%;
   padding: 4.5em 1.5em 1.5em;
   border-radius: 0.8em;
   background: rgba(0, 0, 0, 0.7) url(./images/spinning.gif) no-repeat center 1.5em;
   background-size: auto 3em;
   color: white;
   text-align: center;
-  word-wrap: break-word;
 }
 /*theme 'circling'*/
 .circling {
-  text-align: center;
-  word-wrap: break-word;
 }
 .circling:before {
   content:'';

@@ -3,6 +3,7 @@
 exports[`json full matches 1`] = `
 Object {
   "blobs": "LoadingSignal__blobs",
+  "circling": "LoadingSignal__circling",
   "global": "LoadingSignal__global LoadingSignal__loading",
   "globalMasked": "LoadingSignal__globalMasked LoadingSignal__global LoadingSignal__loading LoadingSignal__masked",
   "loading": "LoadingSignal__loading",
@@ -11,6 +12,7 @@ Object {
   "masked": "LoadingSignal__masked",
   "messageList": "LoadingSignal__messageList",
   "progress": "LoadingSignal__progress",
+  "progressBar": "LoadingSignal__progressBar",
   "spinning": "LoadingSignal__spinning",
 }
 `;

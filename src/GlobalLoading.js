@@ -1,24 +1,25 @@
 // @flow
-import React, { Component } from 'react';
-import type { Node } from 'react';
+import React, { Component, type Node, type ComponentType } from 'react';
 import { render } from 'react-dom';
 import { Spinning } from './themes';
-// import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
 import styles from './styles';
 
 
+type Theme = ComponentType<*>;
+type Masked = bool;
+type Closable = bool;
+
 type Props = {
-  theme?: React.ComponentType<*>,
-  masked?: bool,
-  closable?: bool,
+  theme?: Theme,
+  masked?: Masked,
+  closable?: Closable,
 };
 type State = {
   shown: bool,
   messages: {[string]: Node},
 };
 type Id = string;
-type IdPromise = Promise<Id> | bool;
-export opaque type Indicator = IdPromise;
+export type Indicator = Promise<Id> & { _canceled?: true };
 
 export class GlobalLoadingComp extends Component<Props, State> {
   static generateID(): Id {
@@ -55,7 +56,6 @@ export class GlobalLoadingComp extends Component<Props, State> {
       this.loadingCount = 0;
     }
     delete this.state.messages[id];
-    //* ********************* ???????????????????? immutable??????????
     this.setState({ shown: !!this.loadingCount, messages: this.state.messages });
   }
   clickHandler = () => {
@@ -65,7 +65,7 @@ export class GlobalLoadingComp extends Component<Props, State> {
   };
 
   render() {
-    const Theme = this.props.theme || Spinning;
+    const CTheme = this.props.theme || Spinning;
     const msgs = this.state.messages;
     const msgList = Object.keys(this.state.messages).length ? (
       <ul className={styles.messageList}>
@@ -85,7 +85,7 @@ export class GlobalLoadingComp extends Component<Props, State> {
         style={{ visibility: this.state.shown ? 'visible' : 'hidden' }}
         onClick={this.clickHandler}
       >
-        <Theme message={msgList} />
+        <CTheme message={msgList} />
       </div>
     );
   }
@@ -96,9 +96,8 @@ export default class GlobalLoading {
 
   Comp: GlobalLoadingComp;
   root: HTMLElement;
-  localHandled = false;
 
-  constructor(theme?:Props.theme, masked?:Props.masked, closable?:Props.closable) {
+  constructor(theme?:Theme, masked?:Masked, closable?:Closable) {
     if (this.constructor.singleInst) {
       // singleton: mount global once for ever; but still update its properties;
       this.constructor.singleInst.render(theme, masked, closable);
@@ -111,20 +110,16 @@ export default class GlobalLoading {
     this.render(theme, masked, closable);
     if (!document.body) throw new Error('Please instantiate GlobalLoading after document.body is accessible');
     document.body.appendChild(this.root);
-    // LoadingEvent.on(EVENT_LOCAL_HADNDLED, this.flagLocalHandled);
   }
-  // flagLocalHandled = () => {
-  //   this.localHandled = true;
-  // };
-  render(theme?:Props.theme, masked?:Props.masked, closable?:Props.closable) {
+  render(theme?:Theme, masked?:Masked, closable?:Closable) {
     this.Comp = render(<GlobalLoadingComp {...{ theme, masked, closable }} />, this.root);
   }
-  open(msg:Node) {
+  open(msg:Node): Indicator {
     // wait for local loading to handle,
     // since `Sync` work is performed after `handleTopLevelImpl` in `batchedUpdates`;
-    const idProm:IdPromise = new Promise((resolve, reject) => {
+    const idProm:Indicator = new Promise((resolve, reject) => {
       window.setTimeout(() => {
-        if (idProm.canceled) {
+        if (idProm._canceled) {
           // bypass this loading, and reset flag;
           reject();
         } else {
@@ -137,7 +132,7 @@ export default class GlobalLoading {
     }); // prevent error bubbling up;
     return idProm;
   }
-  close(idProm?: IdPromise) {
+  close(idProm?: Indicator): void {
     if (!idProm) return;
     idProm.then((id: Id) => {
       this.Comp.removeLoading(id);

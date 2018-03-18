@@ -8,13 +8,14 @@ type Props = {
   path: string,
   load: (number) => {},
   stop: () => {},
-  setButton: (btn: ?HTMLElement) => {},
-  setActive: (active: Indicator) => {},
+  setButton?: (btn: ?HTMLElement) => {},
+  setActive?: (active: Indicator) => {},
 }
 type State = { timeout: number, isInfinity: bool };
 
 class Control extends React.Component<Props, State> {
   state = { timeout: 1, isInfinity: true };
+  btn: ?HTMLElement;
 
   setTimeout = (evt: SyntheticEvent<HTMLInputElement>) => {
     const num = parseInt(evt.currentTarget.value, 10);

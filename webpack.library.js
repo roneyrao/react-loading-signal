@@ -1,8 +1,10 @@
-// production specific configs;
+// library specific configs;
 const path = require('path');
 
-const production = {
-  entry: ['core-js/fn/array/entries', 'core-js/fn/promise', './index.js'],
+const library = {
+  entry: {
+    index: ['core-js/fn/array/entries', 'core-js/fn/promise', './index.js'],
+  },
   context: path.resolve(__dirname, 'src'),
   devtool: 'source-map',
   output: {
@@ -27,4 +29,4 @@ const production = {
   plugins: [],
 };
 
-module.exports = production;
+module.exports = library;

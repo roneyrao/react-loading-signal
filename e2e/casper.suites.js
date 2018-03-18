@@ -13,8 +13,8 @@ casper.options.onError = function(err) {
   casper.echo('environment error' + err);
 }
 
-function testSnapshots(test, file, selector) {
-  const result = matchSnapshots(file, selector);
+function testSnapshots(test, file, selector, diff) {
+  const result = matchSnapshots(file, selector, diff);
   casper.waitFor(result.wait).then(function () {
     if (result.error) {
       test.fail(result.error);
@@ -44,11 +44,21 @@ casper.test.begin('global', function (test) {
       testSnapshots(test, 'global');
     })
     .then(function () {
+      this.click('#change');
+      this.waitWhileSelector('.LoadingSignal__spinning');
+    })
+    .then(function () {
+      test.assertVisible('.LoadingSignal__circling');
+      test.assertVisible('.LoadingSignal__masked');
+
+      testSnapshots(test, 'global_masked');
+    })
+    .then(function () {
       this.click('#stop');
       this.waitWhileSelector('.LoadingSignal__messageList');
     })
     .then(function () {
-      test.assertNotVisible('.LoadingSignal__spinning');
+      test.assertNotVisible('.LoadingSignal__masked');
     });
   casper.run(function () {
     test.done();
@@ -91,16 +101,17 @@ casper.test.begin('container', function (test) {
       this.waitForSelector('.LoadingSignal__spinning');
     })
     .then(function () {
-      test.assertDoesntExist('.LoadingSignal__blobs');
+      test.assertElementCount('#box > .LoadingSignal__loading', 0);
 
       this.click('#load');
-      this.waitForSelector('.LoadingSignal__blobs');
+      this.waitFor(function () {
+        return this.evaluate(function () {
+          return __utils__.findOne('#box > .LoadingSignal__loading');
+        });
+      });
     })
     .then(function () {
-      test.assertVisible('.LoadingSignal__blobs');
-      test.assertEval(function () {
-        return __utils__.findOne('.LoadingSignal__local').parentNode === __utils__.findOne('#box');
-      });
+      test.assertElementCount('.LoadingSignal__local', 1);
 
       this.click('#removeContainer');
       this.waitWhileSelector('.LoadingSignal__blobs');
@@ -133,7 +144,7 @@ casper.test.begin('multiple', function (test) {
     .then(function () {
       test.assertVisible('.LoadingSignal__spinning');
       test.assertVisible('.LoadingSignal__blobs');
-      test.assertSelectorHasText('.LoadingSignal__messageList', 'file1file3');
+      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading file1 ...loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading');
     })
     .then(function () {
       testSnapshots(test, 'multiple');
@@ -145,14 +156,14 @@ casper.test.begin('multiple', function (test) {
     .then(function () {
       test.assertVisible('.LoadingSignal__spinning');
       test.assertVisible('.LoadingSignal__blobs');
-      test.assertSelectorHasText('.LoadingSignal__messageList', 'file3');
+      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading');
 
       this.click('#stop2');
       this.waitWhileVisible('.LoadingSignal__blobs');
     })
     .then(function () {
       test.assertVisible('.LoadingSignal__spinning');
-      test.assertSelectorHasText('.LoadingSignal__messageList', 'file3');
+      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading');
       this.click('#stop3');
       this.waitWhileVisible('.LoadingSignal__spinning');
     })
@@ -174,7 +185,7 @@ casper.test.begin('progress', function (test) {
       this.waitUntilVisible('.LoadingSignal__progressBar');
     })
     .then(function () {
-      testSnapshots(test, 'progress', '#box');
+      testSnapshots(test, 'progress', '#box', 10);
     })
     .then(function () {
       test.assertVisible('.LoadingSignal__progressBar > div');

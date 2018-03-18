@@ -1,6 +1,6 @@
 webpackJsonp([2],{
 
-/***/ 227:
+/***/ 228:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9,12 +9,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_redux_thunk__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__demo_actions__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__demo_reducers__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_FlexLoading__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__demo_actions__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__demo_reducers__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_FlexLoading__ = __webpack_require__(17);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75,13 +75,13 @@ var Local = function (_React$Component) {
         null,
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]('button', { id: 'load', onClick: this.constructor.load }),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]('button', { id: 'stop1', onClick: function onClick() {
-            return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["c" /* stop */])(path1));
+            return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["d" /* stop */])(path1));
           } }),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]('button', { id: 'stop2', onClick: function onClick() {
-            return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["c" /* stop */])(path2));
+            return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["d" /* stop */])(path2));
           } }),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]('button', { id: 'stop3', onClick: function onClick() {
-            return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["c" /* stop */])(path3));
+            return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["d" /* stop */])(path3));
           } }),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6_FlexLoading__["b" /* LocalLoading */], this.state)
       );
@@ -89,9 +89,9 @@ var Local = function (_React$Component) {
   }], [{
     key: 'load',
     value: function load() {
-      store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["a" /* load */])(path1));
-      store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["a" /* load */])(path2));
-      store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["a" /* load */])(path3));
+      store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["b" /* load */])(path1));
+      store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["b" /* load */])(path2));
+      store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__demo_actions__["b" /* load */])(path3, undefined, 'loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading'));
     }
   }]);
 
@@ -105,4 +105,4 @@ Object(__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"])(__WEBPACK_IMPORTED_MOD
 
 /***/ })
 
-},[227]);
+},[228]);

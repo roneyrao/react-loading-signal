@@ -34,7 +34,8 @@ function testSnapshot(name, selector) {
   }
 }
 
-module.exports = function matchSnapshots(name, selector) {
+module.exports = function matchSnapshots(name, selector, diff) {
+  if ( diff === undefined ) diff = 2;
   const result = {
     match: undefined,
     error: undefined
@@ -42,8 +43,8 @@ module.exports = function matchSnapshots(name, selector) {
 
   testSnapshot(name, selector).then(function (data) {
     if (data) {
-      console.log('Mismatch percentage: ', data.rawMisMatchPercentage, ' less than 3');
-      result.match = data.rawMisMatchPercentage < 3; // tolerant of spinning
+      console.log('Expect mismatch percentage: ', data.rawMisMatchPercentage, ' < ', diff);
+      result.match = data.rawMisMatchPercentage < diff; // tolerant of spinning
     }
   }, function (err) {
     console.log('Compare error occured');

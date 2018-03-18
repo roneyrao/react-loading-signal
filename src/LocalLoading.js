@@ -1,43 +1,41 @@
 // @flow
-import * as React from 'react';
+import React, { PureComponent, type Node, type ComponentType } from 'react';
 import { render, findDOMNode, unmountComponentAtNode as unmount } from 'react-dom';
 import styles from './styles';
 import { Blobs } from './themes';
-// import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
 import type { Indicator } from './GlobalLoading';
 
-type Props = {
-  active: ?Indicator,
-  masked: boolean,
-  message: React.Node,
-  button: HTMLElement, // if supplied, 'disabled' of property and class are set;
-  container: ?HTMLElement | false, // where loading is placed;
-  theme: React.ComponentType<*>,
+export type Active = Indicator | bool;
+
+export type LoadingProps = {
+  active: Active,
+  masked?: boolean,
+  message?: Node,
+  button?: HTMLElement, // if supplied, 'disabled' of property and class are set;
+  container?: HTMLElement | false, // where loading is placed;
+  theme?: ComponentType<*>,
 };
 /*
  * Local loading state is managed by caller;
  */
-export default class LocalLoading extends React.PureComponent<Props> {
+export default class LocalLoading extends PureComponent<LoadingProps> {
   static defaultProps = {
     masked: false,
-    message: undefined,
-    button: null,
-    container: undefined,
     theme: Blobs,
   };
-  box: HTMLElement;
+  box: ?HTMLElement;
   getContainer(): HTMLElement {
     // eslint-disable-next-line react/no-find-dom-node
-    const dom: null | Element | Text = findDOMNode(this);
+    const dom = findDOMNode(this);
     if (dom instanceof HTMLElement) {
-      const parent: ?Node = dom.parentNode;
+      const parent = dom.parentNode;
       if (parent instanceof HTMLElement) {
         return parent;
       }
     }
     throw new Error('Local loading DOM is inaccessible');
   }
-  createLoadingBox(container: HTMLElement, masked: boolean) {
+  createLoadingBox(container: HTMLElement, masked: boolean = false) {
     this.box = document.createElement('div');
     // console.error('masked', masked);
     this.box.setAttribute('class', masked ? styles.localMasked : styles.local);
@@ -49,19 +47,22 @@ export default class LocalLoading extends React.PureComponent<Props> {
         container.style.position = 'relative';
       }
     }
-    container.appendChild(this.box);
+    if (this.box) {
+      container.appendChild(this.box);
+    }
   }
-  renderLoading(props) {
+  renderLoading(props: LoadingProps) {
     // console.log('Theme', Theme);
+    if (!this.box) return;
     const Theme = props.theme || Blobs;
     render(<Theme {...props} active={!!props.active} />, this.box);
   }
-  display(active: Props.active, button: HTMLElement) {
+  display(active: Active, button?: HTMLElement) {
     if (active) {
       if (this.box) {
         this.box.style.visibility = 'visible';
         if (active !== true) {
-          active.canceled = true;
+          active._canceled = true;
         }
       }
       if (button) {
@@ -78,7 +79,7 @@ export default class LocalLoading extends React.PureComponent<Props> {
       }
     }
   }
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps(nextProps: LoadingProps) {
     // initial container
     const {
       active, button, message, masked, theme,
@@ -117,15 +118,19 @@ export default class LocalLoading extends React.PureComponent<Props> {
     // show/hide box;
     if (active !== this.props.active || button !== this.props.button) {
       // when button changed, restore previous button state;
-      if (button !== this.props.button && this.props.button && this.props.active) {
-        this.props.button.classList.remove('disabled');
-        this.props.button.removeAttribute('disabled');
+      if (button !== this.props.button && this.props.active) {
+        if (this.props.button !== undefined) {
+          this.props.button.classList.remove('disabled');
+        }
+        if (this.props.button !== undefined) {
+          this.props.button.removeAttribute('disabled');
+        }
       }
       this.display(active, button);
     }
   }
   componentDidMount() {
-    const { active, masked, button }: Props = this.props;
+    const { active, masked, button }: LoadingProps = this.props;
     let { container } = this.props;
     // console.log('didMount props', this.props);
     // initial container
@@ -147,10 +152,10 @@ export default class LocalLoading extends React.PureComponent<Props> {
   destroy() {
     // clear
     unmount(this.box);
-    if (this.box.parentNode) {
+    if (this.box && this.box.parentNode) {
       this.box.parentNode.removeChild(this.box);
+      this.box = null;
     }
-    this.box = null;
   }
   // nothing to render; done manually into container;
   render() {

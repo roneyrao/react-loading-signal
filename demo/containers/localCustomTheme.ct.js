@@ -1,20 +1,20 @@
 // @flow
 import React from 'react';
-import { LocalLoading, type Indicator } from '../../src';
+import { LocalLoading, type Active } from '../../src';
 import ControlCtnr from './control.ct';
 import Block from '../components/block.cp';
 import CustomTheme from '../components/customTheme.cp';
 
-type State = { active: Indicator, button: HTMLElement };
+type State = { active: Active, button?: HTMLElement };
 
 export default class LocalCtnr extends React.PureComponent<{}, State> {
-  setActive = (active: Indicator) => {
+  setActive = (active: Active) => {
     this.setState({ active });
   }
   setButton = (button: HTMLElement) => {
     this.setState({ button });
   }
-  state = { active: null, button: null };
+  state = { active: false, button: undefined };
   render() {
     return (
       <Block

@@ -1,5 +1,3 @@
-// requestAnimationFrame for React16
-import 'raf/polyfill';
 import 'babel-polyfill';
 
 import { configure } from 'enzyme';

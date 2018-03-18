@@ -4,7 +4,6 @@ import { shallow, mount } from 'enzyme';
 import GlobalLoading, { GlobalLoadingComp } from './GlobalLoading';
 import styles from './styles';
 import * as Theme from './themes';
-import { LoadingEvent, EVENT_LOCAL_HADNDLED } from './LoadingEvent';
 
 describe('GlobalLoading Component', () => {
   test('render properly with default props', () => {
@@ -30,7 +29,8 @@ describe('GlobalLoading Component', () => {
     expect(wrapper.prop('style').visibility).toBe('visible');
 
     wrapper.simulate('click');
-    expect(inst.loadingCount).toBe(0);
+    expect(inst.loadingCount).toBe(1);
+    expect(Object.keys(inst.state.messages).length).toBe(1);
     expect(wrapper.prop('style').visibility).toBe('hidden');
   });
   test('custom theme', () => {
@@ -138,8 +138,7 @@ describe('GlobalLoading Class', () => {
 
     const msg = 'loading message';
     const prom = inst.open(msg);
-    LoadingEvent.emit(EVENT_LOCAL_HADNDLED);
-    expect(inst.localHandled).toBe(true);
+    prom._canceled = true;
 
     setTimeout(() => {
       try {

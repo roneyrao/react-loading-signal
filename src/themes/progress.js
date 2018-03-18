@@ -4,7 +4,7 @@ import styles from '../styles';
 
 type Caption = (number) => string;
 type Props = {
-  message?: {
+  message: {
     progress: number,
     caption: Caption,
   },
@@ -25,8 +25,3 @@ export default function LoadingProgress({ message }: Props) {
     </div>
   );
 }
-LoadingProgress.defaultProps = {
-  message: {
-    progress: 0,
-  },
-};

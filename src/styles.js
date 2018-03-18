@@ -1,1 +1,1 @@
-export default from './styles/LoadingSignal.css';
+export { default } from './styles/LoadingSignal.css';

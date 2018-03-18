@@ -1,16 +1,16 @@
 // @flow
 import React from 'react';
-import { type Indicator } from '../../src';
+import { type Active } from '../../src';
 import ControlCtnr from './control.ct';
 import Block from '../components/block.cp';
 import WithContainer from '../components/withContainer.cp';
 
-type State = { active: Indicator };
+type State = { active: Active };
 export default class LocalWithContainer extends React.PureComponent<{}, State> {
-  setActive = (active: Indicator) => {
+  setActive = (active: Active) => {
     this.setState({ active });
   }
-  state = { active: null };
+  state = { active: false };
   render() {
     return (
       <Block

@@ -1,7 +1,10 @@
 {
 	"presets": [
-		["es2015",{
-			modules:false
+		["env",{
+			modules:false,
+      target: {
+        node: 6
+      }
 		}],
 		"stage-1",
 		"flow",
@@ -10,38 +13,27 @@
 	env:{
 		es:{
 			plugins:[
-				[
-          'css-modules-transform',
-          {
-            "generateScopedName": "[name]__[local]",
-            extractCss:'./styles/main.css',
-            prepend:['autoprefixer']
-          }
-        ],
         'react-flow-props-to-prop-types',
+        './babel-plugin-hoist-css',
 			]
 		},
 		cjs:{
 			plugins:[
-				[
-          'css-modules-transform',
-          {
-            "generateScopedName": "[name]__[local]",
-          }
-        ],
         'react-flow-props-to-prop-types',
+        './babel-plugin-hoist-css',
 				"transform-es2015-modules-commonjs"
 			]
 		},
 		test:{
-			plugins:[
-				[
-          'css-modules-transform', {
+      plugins:[
+        "transform-es2015-modules-commonjs",
+        [
+          'css-modules-transform',
+          {
             "generateScopedName": "[name]__[local]",
           }
-        ],
-				"transform-es2015-modules-commonjs"
-			]
+        ]
+      ]
 		}
 	}
 }

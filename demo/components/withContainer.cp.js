@@ -1,20 +1,19 @@
 // @flow
 import * as React from 'react';
-import { LocalLoading } from '../../src';
+import { type Active, LocalLoading } from '../../src';
 import css from '../main.css';
 
 type Props = {
-  active: Indicator,
-  setActive: (Indicator) => void,
+  active: Active,
 }
 type State = {
-  ctnr: ?HTMLElement,
+  ctnr?: HTMLElement,
 }
 export default class LocalWithContainer extends React.Component<Props, State> {
-  state = { ctnr: null };
+  state = {};
   ctnr: ?HTMLElement;
   componentWillReceiveProps(newProps: Props) {
-    if (newProps.active !== this.props.active && newProps.active) {
+    if (newProps.active !== this.props.active && newProps.active && this.ctnr !== null) {
       this.setState({ ctnr: this.ctnr });
     }
   }
@@ -25,7 +24,7 @@ export default class LocalWithContainer extends React.Component<Props, State> {
         <p>text text </p>
         <div
           className={css.customBox}
-          ref={(div: ?HTMLElement) => { this.ctnr = div; }}
+          ref={(div) => { this.ctnr = div; }}
         />
         <LocalLoading {...this.props} container={this.state.ctnr} />
       </div>

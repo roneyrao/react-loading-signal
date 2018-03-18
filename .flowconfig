@@ -1,13 +1,11 @@
 [ignore]
-/demo_built
+<PROJECT_ROOT>/cjs/.+
+<PROJECT_ROOT>/es/.+
+<PROJECT_ROOT>/bundle/.+
+<PROJECT_ROOT>/styles/.+
 
-/cjs
-/es
-/bundle
-/styles
-
-/node_modules
-/coverage
+<PROJECT_ROOT>/coverage/.+
+<PROJECT_ROOT>/demo_built/.+
 
 [include]
 
@@ -16,5 +14,6 @@
 [lints]
 
 [options]
+esproposal.export_star_as=enable
 
 [strict]

@@ -37,7 +37,7 @@
   },
   plugins:["disable", "flowtype"],
   overrides: [{
-    files: ["jest.setupFramework.js", "e2e/**/*.js", "demo/**/*.js", "src/*.test.js"],
+    files: ["*.js", "jest.setupFramework.js", "e2e/**/*.js", "demo/**/*.js", "src/**/*.test.js"],
     "env":{
       "node":true,
       "jest":true,

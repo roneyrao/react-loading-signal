@@ -10,3 +10,4 @@
 /flow-typed
 /e2e/from*
 /e2e/snapshots/temp_*
+/e2e/published

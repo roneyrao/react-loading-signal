@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`no caption 1`] = `
+<div
+  className="LoadingSignal__progress"
+>
+  <div>
+    progress: 50.00%
+  </div>
+  <div
+    className="LoadingSignal__progressBar"
+  >
+    <div
+      style={
+        Object {
+          "width": "50%",
+        }
+      }
+    />
+  </div>
+</div>
+`;

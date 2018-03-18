@@ -4,7 +4,7 @@ import css from '../main.css';
 
 type Props = {
   title: string,
-  desc: string,
+  desc?: string,
   children: React.ChildrenArray<React.Element<*>>,
 }
 
@@ -17,3 +17,6 @@ export default function Block({ title, desc, children }: Props) {
     </div>
   );
 }
+Block.defaultProps = {
+  desc: '',
+};
