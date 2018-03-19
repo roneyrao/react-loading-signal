@@ -20,18 +20,21 @@ import {
 const store = createStore(reducer, applyMiddleware(thunk));
 
 const root = document.getElementById('root');
+const title = 'You can click any button in any order within this page, to check how they work together.';
 if (root) {
   render(
     <Provider store={store}>
-      <div className={css.container}>
-        <h3>You can click any button in any order within this page.</h3>
-        <Global />
-        <Local />
-        <Both />
-        <LocalWithContainer />
-        <LocalWithoutIndicator />
-        <LocalProgress />
-        <LocalCustomTheme />
+      <div>
+        <h3>{title}</h3>
+        <div className={css.container}>
+          <Global />
+          <Local />
+          <Both />
+          <LocalWithContainer />
+          <LocalWithoutIndicator />
+          <LocalProgress />
+          <LocalCustomTheme />
+        </div>
       </div>
     </Provider>,
     root,

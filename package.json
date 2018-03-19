@@ -16,7 +16,7 @@
     "test:unit--updateSnapshots": "jest --updateSnapshot",
     "test": "npm run test:unit && npm run test:e2e",
     "start": "cross-env NODE_ENV=development target=demo webpack-dev-server",
-    "demo-build": "cross-env NODE_ENV=production target=demo webpack",
+    "build-demo": "cross-env NODE_ENV=production target=demo webpack",
     "test-published--build": "node e2e/build-published.js",
     "test-published:cjs": "casperjs test e2e/casper.suites.js --dir=from_cjs",
     "test-published:es": "casperjs test e2e/casper.suites.js --dir=from_es",
