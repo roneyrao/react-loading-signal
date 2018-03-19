@@ -7,15 +7,27 @@
 
 A react loading indicator displayed globally or locally or both, which interoperate with each other.
 
+[online demo](http://roneyrao.github.io/react-loading-signal)
+
+![snapshot](img/snapshot.jpg)
+
+## Features
+
+* Configurate global loading signal once for all (usually ajax layer), and any local loading signal anywhere, which could intercept global one, or not based on your needs.
+
+* Simple extendability to supply custom themes.
+
 ## Install
 
 `npm install react-loading-signal`
 
 ## Usage
 
+## Custom Theme
+
 ## API
 
-## flow types
+## Flow types
 
 ## License
 
