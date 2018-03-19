@@ -1,3 +1,4 @@
+// @flow
 import React, { Component as Comp } from 'react';
 
 export default class TxtTheme extends Comp {

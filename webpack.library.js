@@ -9,7 +9,7 @@ const library = {
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'bundle'),
-    library: 'FlexLoading',
+    library: 'LoadingSignal',
     libraryTarget: 'umd',
   },
   externals: {

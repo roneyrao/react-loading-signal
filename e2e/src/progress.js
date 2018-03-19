@@ -32,7 +32,7 @@ export default class Local extends React.Component<{}, { active: boolean, progre
           <LocalLoading
             {...this.state}
             theme={Themes.Progress}
-            message={{ progress: this.state.progress }}
+            progress={this.state.progress}
           />
         </div>
       </div>

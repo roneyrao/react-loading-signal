@@ -2,25 +2,23 @@
 import React from 'react';
 import styles from '../styles';
 
-type Caption = (number) => string;
-type Props = {
-  message: {
-    progress: number,
-    caption: Caption,
-  },
+export type Caption = (number) => string;
+export type ProgressProps = {
+  message: number,
+  caption: Caption,
 };
 
 
-function caption(progress) {
+function defaultCaption(progress) {
   return `progress: ${(progress * 100).toPrecision(4)}%`;
 }
 
-export default function LoadingProgress({ message }: Props) {
+export default function LoadingProgress({ message, caption }: ProgressProps) {
   return (
     <div className={styles.progress}>
-      <div>{(message.caption || caption)(message.progress)}</div>
+      <div>{(caption || defaultCaption)(message)}</div>
       <div className={styles.progressBar}>
-        <div style={{ width: `${message.progress * 100}%` }} />
+        <div style={{ width: `${message * 100}%` }} />
       </div>
     </div>
   );

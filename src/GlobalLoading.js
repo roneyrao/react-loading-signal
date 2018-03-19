@@ -28,7 +28,7 @@ export class GlobalLoadingComp extends Component<Props, State> {
   static defaultProps = {
     theme: Spinning,
     masked: false,
-    closable: false, // if the masked overlay can be closed when click;
+    closable: false, // if the signal can be closed by clicking the mask;
   };
   state = {
     shown: false,
@@ -91,12 +91,31 @@ export class GlobalLoadingComp extends Component<Props, State> {
   }
 }
 
+/**
+ * Class GlobalLoading.
+ * This class is singleton internally, But could be created more than once.
+ * Exactly that is the only correct way to change the global loading signal styles on the fly.
+ */
 export default class GlobalLoading {
   static singleInst: GlobalLoading;
+  /**
+   * **static**
+   * Retrieve the GlobalLoading singleton instance.
+   * @returns {instance}
+   */
+  static getInstance() {
+    return this.singleInst;
+  }
 
   Comp: GlobalLoadingComp;
   root: HTMLElement;
 
+  /**
+   * @param {React.ComponentType<*>} [theme=Spinning] - Customized theme.
+   * @param {bool} [masked=false] - Whether to display overlay below.
+   * @param {bool} [closable=false] - Whether the signal can be closed by clicking the mask.
+   * @returns {this} - A singleton instance
+   */
   constructor(theme?:Theme, masked?:Masked, closable?:Closable) {
     if (this.constructor.singleInst) {
       // singleton: mount global once for ever; but still update its properties;
@@ -114,12 +133,17 @@ export default class GlobalLoading {
   render(theme?:Theme, masked?:Masked, closable?:Closable) {
     this.Comp = render(<GlobalLoadingComp {...{ theme, masked, closable }} />, this.root);
   }
+  /**
+   * Open global loading signal
+   * @param {React.Node} [msg] - Message to show. (React.Node: anything React can render.)
+   * @returns {Indicator} - An identifier for this signal, ignoring its internal structure.
+   */
   open(msg:Node): Indicator {
     // wait for local loading to handle,
     // since `Sync` work is performed after `handleTopLevelImpl` in `batchedUpdates`;
-    const idProm:Indicator = new Promise((resolve, reject) => {
+    const idLoading:Indicator = new Promise((resolve, reject) => {
       window.setTimeout(() => {
-        if (idProm._canceled) {
+        if (idLoading._canceled) {
           // bypass this loading, and reset flag;
           reject();
         } else {
@@ -127,14 +151,19 @@ export default class GlobalLoading {
         }
       }, 10);
     });
-    idProm.catch(() => {
+    idLoading.catch(() => {
       // console.log('global loading bypassed');
     }); // prevent error bubbling up;
-    return idProm;
+    return idLoading;
   }
-  close(idProm?: Indicator): void {
-    if (!idProm) return;
-    idProm.then((id: Id) => {
+  /**
+   * Close a signal
+   * @param {Indicator} idLoading - The identifier returned by open().
+   * @returns {void}
+   */
+  close(idLoading?: Indicator): void {
+    if (!idLoading) return;
+    idLoading.then((id: Id) => {
       this.Comp.removeLoading(id);
     }, () => {});
   }

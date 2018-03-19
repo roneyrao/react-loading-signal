@@ -108,6 +108,9 @@ describe('GlobalLoading Class', () => {
     const inst2 = new GlobalLoading(null, true);
     expect(first).toBe(inst2);
   });
+  test('get singleton', () => {
+    expect(GlobalLoading.getInstance()).toBe(inst);
+  });
   test('add and remove message', (done) => {
     const msg = 'loading message';
     const prom = inst.open(msg);
