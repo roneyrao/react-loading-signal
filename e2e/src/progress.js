@@ -10,16 +10,16 @@ import { LocalLoading, Themes } from 'FlexLoading'; // eslint-disable-line
 const store = createStore(reducer, applyMiddleware(thunk));
 
 const path = 'file1';
-export default class Local extends React.Component<{}, { active: boolean, progress: number }> {
-  state = { active: false, progress: 0 };
+export default class Local extends React.Component<{}, { active: boolean, message: number }> {
+  state = { active: false, message: 0 };
   componentWillMount() {
     store.subscribe(() => {
       const state = store.getState();
       if (Object.prototype.hasOwnProperty.call(state, path)) {
         if (state[path]) {
-          this.setState({ active: state[path].loading, progress: state[path].progress });
+          this.setState({ active: state[path].loading, message: state[path].progress });
         } else {
-          this.setState({ active: false, progress: 0 });
+          this.setState({ active: false, message: 0 });
         }
       }
     });
@@ -32,7 +32,7 @@ export default class Local extends React.Component<{}, { active: boolean, progre
           <LocalLoading
             {...this.state}
             theme={Themes.Progress}
-            progress={this.state.progress}
+            message={this.state.message}
           />
         </div>
       </div>

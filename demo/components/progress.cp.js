@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
 import { LocalLoading, type Active } from '../../src';
-import { Progress } from '../../src/themes';
+import { Progress, type ProgressProps } from '../../src/themes';
 
 type Props = {
   active: Active,
-} & Progress.ProgressProps;
+} & ProgressProps;
 
 export default function Progressing(props: Props) {
-  return <LocalLoading {...props} theme={Progress.default} />;
+  return <LocalLoading {...props} theme={Progress} />;
 }

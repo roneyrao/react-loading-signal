@@ -181,14 +181,12 @@ Returns **instance**
 #### Usage
 
     import { Themes } from 'react-loading-signal';`
-    type Caption = Themes.Progress.Caption;
-    const ProgressTheme = Progress.default;
+    const { Progress } = Themes;
+    const Props: Themes.ProgressProps = {...};
     // or
-    import { Progress } from 'react-loading-signal/themes';`
-    type Caption = Progress.Caption;
-    const ProgressTheme = Progress.default;
+    import { Progress, ProgressProps } from 'react-loading-signal/themes';`
     // or
-    import { Progress, type Caption } from 'react-loading-signal/themes/progress';`
+    import { Progress, type ProgressProps } from 'react-loading-signal/themes/progress';`
 
 ## License
 

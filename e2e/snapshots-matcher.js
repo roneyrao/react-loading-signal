@@ -35,7 +35,7 @@ function testSnapshot(name, selector) {
 }
 
 module.exports = function matchSnapshots(name, selector, diff) {
-  if ( diff === undefined ) diff = 2;
+  if ( diff === undefined ) diff = 1;
   const result = {
     match: undefined,
     error: undefined
