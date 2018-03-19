@@ -25,7 +25,7 @@ export default class Local extends React.Component<{}, { active: bool }> {
   static load() {
     store.dispatch(load(path1));
     store.dispatch(load(path2));
-    store.dispatch(load(path3, undefined, 'loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading'));
+    store.dispatch(load(path3, undefined, 'loading file2 with long name loading file2 with long name'));
   }
   render() {
     return (

@@ -9,7 +9,7 @@ A React loading indicator displayed globally or locally or both, which interoper
 
 [online demo](http://roneyrao.github.io/react-loading-signal)
 
-![spinning](e2e/snapshots/global.png)
+![spinning](e2e/snapshots/multiple.png)
 ![circling](e2e/snapshots/global_masked.png)
 ![blobs](e2e/snapshots/local.png)
 ![progress](e2e/snapshots/progress.png)

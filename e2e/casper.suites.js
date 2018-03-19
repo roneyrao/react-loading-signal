@@ -133,6 +133,7 @@ casper.test.begin('container', function (test) {
 });
 
 casper.test.begin('multiple', function (test) {
+  const file2 = 'loading file2 with long name loading file2 with long name'
   casper.start(pfx + 'multiple')
     .then(function () {
       this.waitForSelector('.LoadingSignal__spinning');
@@ -144,7 +145,7 @@ casper.test.begin('multiple', function (test) {
     .then(function () {
       test.assertVisible('.LoadingSignal__spinning');
       test.assertVisible('.LoadingSignal__blobs');
-      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading file1 ...loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading');
+      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading file1 ...' + file2);
     })
     .then(function () {
       testSnapshots(test, 'multiple');
@@ -156,14 +157,14 @@ casper.test.begin('multiple', function (test) {
     .then(function () {
       test.assertVisible('.LoadingSignal__spinning');
       test.assertVisible('.LoadingSignal__blobs');
-      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading');
+      test.assertSelectorHasText('.LoadingSignal__messageList', file2);
 
       this.click('#stop2');
       this.waitWhileVisible('.LoadingSignal__blobs');
     })
     .then(function () {
       test.assertVisible('.LoadingSignal__spinning');
-      test.assertSelectorHasText('.LoadingSignal__messageList', 'loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading loading');
+      test.assertSelectorHasText('.LoadingSignal__messageList', file2);
       this.click('#stop3');
       this.waitWhileVisible('.LoadingSignal__spinning');
     })
