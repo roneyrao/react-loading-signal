@@ -1,10 +1,12 @@
 // @flow
 import React, { Component as Comp } from 'react';
+import { type LoadingProps } from '../../src';
 
-export default class TxtTheme extends Comp {
+export default class TxtTheme extends Comp<LoadingProps, { symbol: string }> {
   static Symbols = ['--', '\\', '|', '/'];
   symLen = this.constructor.Symbols.length;
   symIndex = 0;
+  timer: ?number;
   state = { symbol: '' };
   clearTimer() {
     if (this.timer) {
@@ -18,7 +20,7 @@ export default class TxtTheme extends Comp {
       this.setState({ symbol: this.constructor.Symbols[this.symIndex] });
     }, 200);
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: LoadingProps) {
     if (nextProps.active !== this.props.active) {
       if (nextProps.active === true) {
         this.startSpinning();

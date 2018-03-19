@@ -5,7 +5,7 @@ import styles from '../styles';
 export type Caption = (number) => string;
 export type ProgressProps = {
   message: number,
-  caption: Caption,
+  caption?: Caption,
 };
 
 
@@ -16,10 +16,14 @@ function defaultCaption(progress) {
 export default function LoadingProgress({ message, caption }: ProgressProps) {
   return (
     <div className={styles.progress}>
-      <div>{(caption || defaultCaption)(message)}</div>
+      <div>{caption && caption(message)}</div>
       <div className={styles.progressBar}>
         <div style={{ width: `${message * 100}%` }} />
       </div>
     </div>
   );
 }
+
+LoadingProgress.defaultProps = {
+  caption: defaultCaption,
+};

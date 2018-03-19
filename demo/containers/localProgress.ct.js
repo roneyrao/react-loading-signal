@@ -7,16 +7,16 @@ import Progress from '../components/progress.cp';
 import { loadProgress } from '../actions';
 
 type Status = { loading: Active, progress: number };
-type State = { active: Active, progress: number };
+type State = { active: Active, message: number };
 export default class LocalProgress extends React.PureComponent<{}, State> {
   setStatus = (status: Status) => {
     if (status) {
-      this.setState({ active: status.loading, progress: status.progress });
+      this.setState({ active: status.loading, message: status.progress });
     } else {
-      this.setState({ active: false, progress: 0 });
+      this.setState({ active: false, message: 0 });
     }
   }
-  state = { active: false, progress: 0 };
+  state = { active: false, message: 0 };
   render() {
     return (
       <Block
