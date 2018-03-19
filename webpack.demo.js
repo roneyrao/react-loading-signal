@@ -1,5 +1,6 @@
 // development specific configs;
 const path = require('path');
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -41,4 +42,12 @@ if (path.basename(require.main.filename) === 'webpack-dev-server.js') {
     },
   });
 }
+
+if (process.env.NODE_ENV === 'production') {
+  development.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    drop_console: true,
+    sourceMap: true,
+  }));
+}
+
 module.exports = development;
