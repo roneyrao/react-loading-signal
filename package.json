@@ -1,6 +1,6 @@
 {
   "name": "react-loading-signal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A react loading indicator displayed globally or locally or both, which interoperate with each other",
   "main": "cjs",
   "module": "es",
