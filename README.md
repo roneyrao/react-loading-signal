@@ -7,7 +7,7 @@
 
 A React loading indicator displayed globally or locally or both, which interoperate with each other.
 
-[online demo](http://roneyrao.github.io/react-loading-signal)
+[Online Demo](http://roneyrao.github.io/react-loading-signal)
 
 ![spinning](e2e/snapshots/multiple.png)
 ![circling](e2e/snapshots/global_masked.png)
@@ -19,6 +19,8 @@ A React loading indicator displayed globally or locally or both, which interoper
 -   Configurate global loading signal once for all (usually in ajax layer), and add any local loading signals anywhere, which could intercept global one, or not based on your needs.
 
 -   Simple extendability to supply custom themes.
+
+-   Support React 15.
 
 ## Install
 
@@ -53,43 +55,46 @@ or in global scope:
 Substitute 'bundle' with 'bundle.min'.
 
 ## Usage
+```javascript
+  // ajax layer
+  import { GlobalLoading, LocalLoading } from 'react-loading-signal';
+  const gLoading = new GlobalLoading();
+  // to change the global loading signal style, create a new one:
+  // new GlobalLoading(theme, true, true);
 
-    // ajax layer
-    import { GlobalLoading, LocalLoading } from 'react-loading-signal';
-    const gLoading = new GlobalLoading();
-    // to change the global loading signal style, create a new one:
-    // new GlobalLoading(theme, true, true);
+  function request(url) {
+    const idLoading = gLoading.open();
 
-    function request(url) {
-      const idLoading = gLoading.open();
+    // pass idLoading to LocalLoading, take redux for example:
+    // dispatch({ type: url, loading: idLoading })
 
-      // pass idLoading to LocalLoading, take redux for example:
-      // dispatch({ type: url, loading: idLoading })
+    fetch(url)
+      .then(function(response) {
+        return response.json();
+      }, () => {})
+      .then(function() {
+        gLoading.close(idLoading);
+      });
+  }
 
-      fetch(url)
-        .then(function(response) {
-          return response.json();
-        }, () => {})
-        .then(function() {
-          gLoading.close(idLoading);
-        });
-    }
+  // local loading signal
 
-    // local loading signal
-
-    <LocalLoading active={idLoading} />
+  <LocalLoading active={idLoading} />
+```
 
 ## Themes
 
 ### Builtin themes
 
-    import { Themes } from 'react-loading-signal';
-    const { Spinning, Blobs, Circling, Progress } = Themes;
-
 -   Spinning
 -   Blobs
 -   Circling
 -   Progress
+
+```javascript
+  import { Themes } from 'react-loading-signal';
+  const { Spinning, Blobs, Circling, Progress } = Themes;
+```
 
 ### Customize theme
 
@@ -144,7 +149,7 @@ Returns **void**
 
 #### getInstance
 
-**static**
+**[static]**
 Retrieve the GlobalLoading singleton instance.
 
 Returns **instance**
@@ -180,13 +185,25 @@ Returns **instance**
 
 #### Usage
 
-    import { Themes } from 'react-loading-signal';`
-    const { Progress } = Themes;
-    const Props: Themes.ProgressProps = {...};
-    // or
-    import { Progress, ProgressProps } from 'react-loading-signal/themes';`
-    // or
-    import { Progress, type ProgressProps } from 'react-loading-signal/themes/progress';`
+```javascript
+  import { Themes } from 'react-loading-signal';
+  const { Progress } = Themes;
+  const Props: Themes.ProgressProps = {...};
+  // or
+  import { Progress, ProgressProps } from 'react-loading-signal/themes';
+  // or
+  import { Progress, type ProgressProps } from 'react-loading-signal/themes/progress';
+```
+
+## Development
+
+-   To test when developing, run the demo:
+
+  `npm start`
+
+-   E2e tests are run against [PhantomJS v2.1.1](http://phantomjs.org/), if you adopt other versions or tools, the snapshots shipped maybe invalidated, run this command to update:
+
+  `npm run test:e2e--updateSnapshots`
 
 ## License
 
