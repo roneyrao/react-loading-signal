@@ -7,11 +7,10 @@
 
 A React loading indicator displayed globally or locally or both, which interoperate with each other.
 
-[Online Demo](http://roneyrao.github.io/react-loading-signal)
+[Online Demo >>](http://roneyrao.github.io/react-loading-signal)
 
 ![spinning](e2e/snapshots/multiple.png)
 ![circling](e2e/snapshots/global_masked.png)
-![blobs](e2e/snapshots/local.png)
 ![progress](e2e/snapshots/progress.png)
 
 ## Features
@@ -24,62 +23,72 @@ A React loading indicator displayed globally or locally or both, which interoper
 
 ## Install
 
-`npm install react-loading-signal`
+```
+npm install react-loading-signal
+```
 
 ## Import
 
 Take `GlobalLoading`as example
 
 ### es module
-
-`import { GlobalLoading } from 'react-loading-signal';`
+```
+import { GlobalLoading } from 'react-loading-signal';
+```
 
 #### commonjs module
-
-`const GlobalLoading = require('react-loading-signal').GlobalLoading;`
+```
+const GlobalLoading = require('react-loading-signal').GlobalLoading;
+```
 
 #### bundled version
-
-`import { GlobalLoading } from 'react-loading-signal/bundle';`
+```
+import { GlobalLoading } from 'react-loading-signal/bundle';
+```
 
 or
 
-`const GlobalLoading = require('react-loading-signal/bundle').GlobalLoading;`
+```
+const GlobalLoading = require('react-loading-signal/bundle').GlobalLoading;
+```
 
 or in global scope:
 
-`const GlobalLoading = LoadingSignal.GlobalLoading;`
+```
+const GlobalLoading = LoadingSignal.GlobalLoading;
+```
 
 #### bundled minified version
 
 Substitute 'bundle' with 'bundle.min'.
 
 ## Usage
-```javascript
-  // ajax layer
-  import { GlobalLoading, LocalLoading } from 'react-loading-signal';
-  const gLoading = new GlobalLoading();
-  // to change the global loading signal style, create a new one:
-  // new GlobalLoading(theme, true, true);
+```
+// ajax layer
+import { GlobalLoading, LocalLoading } from 'react-loading-signal';
+const gLoading = new GlobalLoading();
 
-  function request(url) {
-    const idLoading = gLoading.open();
+// to change the global loading signal style, create a new one:
+// new GlobalLoading(theme, true, true);
 
-    // pass idLoading to LocalLoading, take redux for example:
-    // dispatch({ type: url, loading: idLoading })
+function request(url) {
+  const idLoading = gLoading.open();
 
-    fetch(url)
-      .then(function(response) {
-        return response.json();
-      }, () => {})
-      .then(function() {
-        gLoading.close(idLoading);
-      });
-  }
+  // pass idLoading to LocalLoading, take redux for example:
+  // dispatch({ type: url, loading: idLoading })
 
-  // local loading signal
+  fetch(url)
+    .then(function(response) {
+      return response.json();
+    }, () => {})
+    .then(function() {
+      gLoading.close(idLoading);
+    });
+}
 
-  <LocalLoading active={idLoading} />
+// local loading signal
+<LocalLoading active={idLoading} />
+
 ```
 
 ## Themes
@@ -91,9 +100,9 @@ Substitute 'bundle' with 'bundle.min'.
 -   Circling
 -   Progress
 
-```javascript
-  import { Themes } from 'react-loading-signal';
-  const { Spinning, Blobs, Circling, Progress } = Themes;
+```
+import { Themes } from 'react-loading-signal';
+const { Spinning, Blobs, Circling, Progress } = Themes;
 ```
 
 ### Customize theme
@@ -102,7 +111,7 @@ Any valid React Component can be used as a theme. It will receive any props that
 
 ## Styles
 
-In bundled version, Classes are all prepended with `LoadingSignal__`. Details please refer to `/styles/LoadingSignal.css`.
+In bundled version, Classes are all prepended with `LoadingSignal__`. Details please refer to `/styles/LoadingSignal.css`. (`src/styles/LoadingSignal.css` in source code.)
 
 ## API
 
@@ -117,7 +126,6 @@ In bundled version, Classes are all prepended with `LoadingSignal__`. Details pl
 
 ### GlobalLoading
 
-Class GlobalLoading.
 This class is singleton internally, But could be created more than once.
 Exactly that is the only correct way to change the global loading signal styles on the fly.
 
@@ -154,6 +162,7 @@ Retrieve the GlobalLoading singleton instance.
 
 Returns **instance**
 
+
 ## Exported flow types
 
 ### GlobalLoading & LocalLoading
@@ -171,9 +180,9 @@ Returns **instance**
     -   `container` **HTMLElement | false** - Container where its placed. When not provided, parentNode is implied. If set to `false`, no signal will be shown, other functions still work. (optional, default `undefined`)
     -   `theme` **React.ComponentType&lt;\*>** - The Component defining its actual visual outlook. You can pass any props to `LocalLoading` which will be relayed to this component. (optional, default `Blobs`)
 
-#### Usage
-
-`import { type Indicator, type Active, type LoadingProps } from 'react-loading-signal';`
+```
+import { type Indicator, type Active, type LoadingProps } from 'react-loading-signal';
+```
 
 ### Progress Theme
 
@@ -183,27 +192,28 @@ Returns **instance**
     -   message **number** The decimal number indicating current progress. The max is 1.
     -   caption **Caption** see above.
 
-#### Usage
-
-```javascript
-  import { Themes } from 'react-loading-signal';
-  const { Progress } = Themes;
-  const Props: Themes.ProgressProps = {...};
-  // or
-  import { Progress, ProgressProps } from 'react-loading-signal/themes';
-  // or
-  import { Progress, type ProgressProps } from 'react-loading-signal/themes/progress';
+```
+import { Themes } from 'react-loading-signal';
+const { Progress } = Themes;
+const Props: Themes.ProgressProps = {...};
+// or
+import { Progress, ProgressProps } from 'react-loading-signal/themes';
+// or
+import { Progress, type ProgressProps } from 'react-loading-signal/themes/progress';
 ```
 
 ## Development
 
 -   To test when developing, run the demo:
-
-  `npm start`
+```
+npm start
+```
 
 -   E2e tests are run against [PhantomJS v2.1.1](http://phantomjs.org/), if you adopt other versions or tools, the snapshots shipped maybe invalidated, run this command to update:
 
-  `npm run test:e2e--updateSnapshots`
+```
+npm run test:e2e--updateSnapshots
+```
 
 ## License
 

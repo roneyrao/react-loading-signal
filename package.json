@@ -1,6 +1,6 @@
 {
   "name": "react-loading-signal",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A react loading indicator displayed globally or locally or both, which interoperate with each other",
   "main": "cjs",
   "module": "es",
@@ -30,7 +30,7 @@
     "prebuild": "npm test",
     "build": "npm run build:bundle && npm run build:modules",
     "postbuild": "npm run test-published",
-    "prepublishOnly": "npm run build"
+    "-prepublishOnly": "npm run build"
   },
   "files": [
     "styles",
