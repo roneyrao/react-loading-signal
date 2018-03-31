@@ -6,7 +6,7 @@
   "module": "es",
   "scripts": {
     "install-flow": "flow-typed install",
-    "postinstall": "node -e \"JSON.parse(process.env['npm_config_argv']).remain[0] && process.exit(1)\" && install-flow || echo",
+    "postinstall": "node -e \"JSON.parse(process.env['npm_config_argv']).remain[0] && process.exit(1)\" && npm run install-flow || echo",
     "pretest": "flow",
     "test:e2e--build": "cd e2e && cross-env NODE_ENV=from_source webpack",
     "test:e2e--run": "casperjs test e2e/casper.suites.js --dir=from_source",
